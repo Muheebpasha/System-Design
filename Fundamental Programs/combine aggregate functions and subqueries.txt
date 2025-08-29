@@ -1,0 +1,23 @@
+How to combine aggregate functions and subqueries?
+To combine aggregate functions and subqueries in SQL, follow these steps:
+
+Understand Aggregate Functions: Aggregate functions like SUM, COUNT, AVG, etc., operate on sets of values. For example, SELECT SUM(column_name) FROM table_name sums all values in a specified column.
+
+Identify the Subquery purpose: A subquery is a query nested inside another SQL query. It can be used to calculate a value that the main query will use, allowing you to refer to the result of that subquery in your aggregate function.
+
+Write the Subquery: Ensure that the subquery returns a single value if it will be combined directly with an aggregate function. For instance, if you wanted to find the average score of users whose review count is above a certain threshold, your subquery would filter these users.
+
+Structure Your Query: Incorporate the subquery in the main query. You'll usually format the main query like this:
+
+SQL
+SELECT AVG(column_name) 
+FROM table_name 
+WHERE column_name IN (SELECT column_name FROM another_table WHERE condition);
+Run Your Query: Execute the query to retrieve results. Ensure there are no syntax errors and that the logic is correctly applied.
+As an illustration, suppose you want to find the average score of reviews above a certain amount:
+============================================================================================
+SELECT AVG(score) 
+FROM reviews 
+WHERE reviewer_id IN 
+    (SELECT reviewer_id FROM reviews GROUP BY reviewer_id HAVING COUNT(*) > 10);
+============================================================================================

@@ -1,0 +1,10 @@
+List<String> tropicalFruits = Arrays.asList("Pineapple","Kiwi");
+Yes, you are correct!
+
+The line List<String> tropicalFruits = Arrays.asList("Pineapple", "Kiwi"); is used to:
+
+1. Initialize a List (specifically, an ArrayList in this context, as Arrays.asList returns a fixed-size List backed by the array, which is then often used to initialize a modifiable ArrayList).
+
+2. With a set of elements ("Pineapple", "Kiwi") all at once at the time of its creation.
+
+It's a convenient way to quickly populate a List with a predefined set of values without having to call add() multiple times for each element.

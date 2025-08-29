@@ -1,0 +1,60 @@
+Grep command :
+=================================================================
+🔹 Basic Syntax: 
+================================================================
+grep [options] pattern [file...]
+================================================================
+1. Search for a word in a file
+grep "hello" file.txt
+
+Finds lines containing "hello" in file.txt.
+
+==================================================================
+2. Case-insensitive search
+grep -i "hello" file.txt
+
+Finds "hello", "Hello", "HELLO", etc.
+
+===================================================================
+3. Search recursively in all files in a directory
+grep -r "main" .
+
+Searches for "main" in the current directory and all subdirectories.
+
+====================================================================
+4. Show line numbers with matches
+grep -n "error" log.txt
+Displays matching lines with their line numbers.
+
+====================================================================
+5. Search for exact word match
+grep -w "cat" animals.txt
+Matches "cat" but not "caterpillar".
+
+====================================================================
+6. Invert match (show lines that don't match)
+grep -v "debug" log.txt
+Shows all lines not containing "debug".
+
+====================================================================
+7. Count number of matches
+grep -c "404" access.log
+Outputs how many lines contain "404".
+
+====================================================================
+8. Use regular expressions
+grep "gr[ae]y" colors.txt
+Matches both "gray" and "grey".
+
+====================================================================
+9. Search multiple patterns
+grep -E "dog|cat" pets.txt
+Finds lines containing "dog" or "cat" using extended regex.
+
+====================================================================
+10. Search in multiple files
+grep "TODO" *.py
+Looks for "TODO" comments in all .py files.
+
+===================================================================
+
