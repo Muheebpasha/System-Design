@@ -12,7 +12,7 @@ public class StripeCard implements Card {
 
     @Override
     public boolean validateCardDetails() {
-        System.out.println("Validation Strip Card Details");
+        System.out.println("Validation Stripe Card Details");
         return true;
     }
 

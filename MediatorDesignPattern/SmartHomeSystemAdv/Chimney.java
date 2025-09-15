@@ -1,4 +1,3 @@
-// Chimney with extra controls
 class Chimney implements SmartDevice {
     private int level = 0;
     private boolean lightOn = false;

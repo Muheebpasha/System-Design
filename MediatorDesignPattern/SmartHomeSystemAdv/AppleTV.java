@@ -1,4 +1,3 @@
-// Apple TV with extra controls
 class AppleTV implements SmartDevice {
     private int volume = 5;
     private int brightness = 3;
