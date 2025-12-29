@@ -1,0 +1,280 @@
+Why use Spring Boot for Microservices?
+Spring Boot provides:
+1. Embedded server (Tomcat)
+2. Auto-configuration
+3. East REST APIs
+4. Spring Cloud Integration
+* Ideal for fast Microservice development.
+
+-------------------------------------------------
+What is Spring Cloud?
+Spring Cloud provides tools for distributed systems, such as:
+1. Service Discovery
+2. Configuration Management
+3. Load Balancing
+4. Circuit Breakers
+-----------------------------------------------------
+What is Service Discovery?
+Service Discovery allows services to find each other dynamically instead of hard-coding IP's.
+Example :
+* Order Service needs User Service
+* It asks Eureka Server
+* Eureka returns the service instance
+------------------------------------------------------
+What is Eureka Server?
+Eureka is a Service Registry.
+* Services register themselves.
+* Other services discover them.
+Annotations:
+@EnableEurekaServer
+@EnableEurekaClient
+------------------------------------------------------
+What is Client-Side Load Balancing?
+The client decides which service instance to call.
+Tool:
+Spring Cloud LoadBalancer
+Example :
+@LoadBalanced
+RestTemplate restTemplate;
+-------------------------------------------------------
+What is API Gateway?
+API Gateway is the single entry point for all client requests.
+
+Responsibilities:
+1. Routing
+2. Authentication
+3. Rate Limiting
+4. Logging 
+5. Security
+
+Example :
+Spring Cloud Gateway.
+----------------------------------------------------------
+Difference between API Gateway and Load Balancer?
+-----------------------------------------------
+| API Gateway           | Load Balancer       |
+| --------------------- | ------------------- |
+| Entry point           | Distributes traffic |
+| Handles auth, routing | Only load           |
+| Application-level     | Network-level       |
+-----------------------------------------------
+What is Circuit Breaker?
+Prevents cascading failures by stopping calls to failing services.
+Tool:
+* Resilience4j
+States:
+* CLOSED -> Normal
+* OPEN -> Calls blocked
+* HALF-OPEN -> Testing recovery
+------------------------------------------------------------
+Why Circuit Breaker is important?
+* Prevents system crash
+* Improves fault tolerance
+* Reduces latency
+--------------------------------------------------------------
+What is Config Server?
+Centralized configuration management for microservices.
+
+Benefits:
+* No hard-coded configs
+* Environment specific configs
+* Dynamic refresh
+--------------------------------------------------------------
+What is @RefreshScope?
+Refreshes configuration without restarting service.
+
+@RefreshScope
+@RestController
+--------------------------------------------------------------
+What is Distributed Tracing?
+Tracks a request across multiple microservices.
+Tools:
+1. Zipkin
+2. Sleuth
+Helps in debugging latency issues.
+--------------------------------------------------------------
+What is Saga Pattern?
+Manages distributed transactions.
+Types: 
+1. Choreography
+2. Orchestration
+ Instead of rollback -> use compensating transactions
+------------------------------------------------------------------
+Why not use DB transactions in Microservices?
+* Services have independent databases
+* Distributed DB transactions are expensive
+* Breaks loose coupling.
+------------------------------------------------------------------
+Communication between Micrpservices?
+1. Synchronous
+ * REST
+ * Feign Client
+
+2. Asynchronous
+ * Kafka
+ * RabbitMQ
+
+---------------------------------------------------------------------
+What is Feign Client?
+Declarative REST Client.
+
+@FeignClient("USER-SERVICE")
+public interface UserClient {
+	@GetMapping("/users/{id}")
+	User getUser(@PathVariable int id);
+}
+---------------------------------------------------------------------
+What is Idempotency?
+Multiple Identical requests produce same result.
+* Important for retries
+---------------------------------------------------------------------
+How do you secure Microservices?
+ * OAuth2
+ * JWT
+ * API Gateway authentication
+ * HTTPS
+ * Spring Security
+----------------------------------------------------------------------
+How to handle failures in Microservices?
+ * Retry
+ * Circuit Breaker
+ * Timeout
+ * Fallback methods
+----------------------------------------------------------------------
+What is Event-Driven Microservices?
+Services communicate via events, not direct calls.
+Example:
+* OrderPlacedEvent -> Payment Service consumes
+-----------------------------------------------------------------------
+What is Database per Service Pattern?
+Each microservice owns its database.
+Benefits:
+ * Loose coupling.
+ * Independent scaling.
+ * Better security.
+-----------------------------------------------------------------------
+Challenges of Microservices?
+ * Distributed debugging
+ * Network latency
+ * Data consistency
+ * Complex deployment
+ * Monitoring
+-----------------------------------------------------------------------
+How to you monitor Microservices?
+ * Prometheus
+ * Grafana
+ * ELK Stack
+ * Zipkin
+------------------------------------------------------------------------
+🔥 Real Interview One-Line Answers
+
+* Microservices → Small independent services
+
+* Eureka → Service registry
+
+* Feign → REST client
+
+* Circuit Breaker → Failure protection
+
+* Gateway → Single entry point
+
+* Saga → Distributed transaction handling
+-----------------------------------------------------------------------------
+What is Spring Cloud?
+Spring Cloud = Framework / Library
+* Built on top of Spring Boot.
+* Helps solve microservices problems.
+* Runs inside your application.
+------------------------------------------------------------------------------
+What Spring Cloud Provides:
+* Service Discovery (Eureka)
+* API Gateway
+* Config Server
+* Load Balancing
+* Circuit Breaker
+=> It does NOT provide service or infrastructure.
+----------------------------------------------------------------------
+What is AWS Cloud?
+AWS Cloud = Cloud Platform / Infrastructure
+* Provides servers, storage, networking
+* Fully managed services
+* Pay-as-you-go model
+
+AWS Provides:
+* EC2 (Virtual Servers)
+* ECS / EKS (Containers & Kubernetes)
+* RDS (Database)
+* S3 (Storage)
+* Load Balancer
+* IAM (Security)
+=> AWS runs your applications.
+----------------------------------------------------------------------
+Key Difference
+--------------------------------------------------------------------------
+| Feature           | Spring Cloud           | AWS Cloud                 |
+| ----------------- | ---------------------- | ------------------------- |
+| Type              | Framework              | Cloud Platform            |
+| Purpose           | Microservices patterns | Infrastructure & services |
+| Language          | Java                   | Any                       |
+| Runs where?       | Inside app             | Data centers              |
+| Provides servers? | ❌ No                  | ✅ Yes                    |
+| Example           | Eureka, Gateway        | EC2, EKS, RDS             |
+--------------------------------------------------------------------------
+
+🔹 Can We Use Them Together? (Very Important)
+
+✅ YES — very common in real projects
+
+Example Architecture:
+-----------------------
+Spring Boot Microservices
+   ↓
+Spring Cloud (Gateway, Config, Eureka)
+   ↓
+Deployed on AWS (EC2 / EKS)
+
+============================================================================
+🔹 Mapping: Spring Cloud vs AWS Services
+-------------------------------------------------------------------
+| Microservices Need | Spring Cloud         | AWS Alternative     |
+| ------------------ | -------------------- | ------------------- |
+| Service Discovery  | Eureka               | AWS Cloud Map       |
+| API Gateway        | Spring Cloud Gateway | AWS API Gateway     |
+| Config Server      | Spring Config Server | AWS Parameter Store |
+| Load Balancing     | Spring LB            | AWS ELB             |
+| Circuit Breaker    | Resilience4j         | AWS App Mesh        |
+-------------------------------------------------------------------
+=============================================================================
+🔹 When to Use Spring Cloud?
+
+✅ When:
+
+* Java + Spring Boot project
+
+* Want cloud-agnostic solution
+
+* Running on any cloud (AWS / Azure / GCP)
+=============================================================================
+🔹 When to Use AWS Native Services?
+
+✅ When:
+
+* Want fully managed services
+
+* Less operational overhead
+
+* Cloud-specific optimizations
+
+==============================================================================
+🔹 Interview Trap Question ⚠️
+
+✅ Correct Answer:
+
+Spring Cloud is independent of AWS and can run on any cloud or on-prem.
+
+🔥 Final Interview Summary
+
+Spring Cloud helps you build microservices
+AWS Cloud helps you run microservices
+==============================================================================
+

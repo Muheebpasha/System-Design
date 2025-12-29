@@ -1,0 +1,64 @@
+The Observer Design Pattern in Java defines a one-to-many dependency between a Subject (sometimes called Observable) and its Observers. When the subject’s state changes, all registered observers are notified automatically.
+
+Below is the skeleton (basic structure) of the Observer Design Pattern in Java, focusing on the core elements while omitting concrete implementations for brevity:
+
+
+// Observer interface: Defines the update contract
+public interface Observer {
+    void update();
+}
+
+// Subject (Observable) class: Manages observers and state
+import java.util.ArrayList;
+import java.util.List;
+
+public class Subject {
+    private List<Observer> observers = new ArrayList<>();
+    private int state;
+
+    public void addObserver(Observer observer) {
+        observers.add(observer);
+    }
+
+    public void removeObserver(Observer observer) {
+        observers.remove(observer);
+    }
+
+    public void setState(int state) {
+        this.state = state;
+        notifyObservers();
+    }
+
+    public int getState() {
+        return state;
+    }
+
+    private void notifyObservers() {
+        for (Observer observer : observers) {
+            observer.update();
+        }
+    }
+}
+
+How it works:
+===========
+The Subject encapsulates a list of observers and provides methods to addObserver, removeObserver, and notifyObservers.
+
+The Observer interface requires an update() method that all observers must implement to respond to Subject changes.
+
+Concrete observers implement the Observer interface and register themselves with a subject.
+
+Example usage:
+=============
+public class ConcreteObserver implements Observer {
+    private Subject subject;
+    public ConcreteObserver(Subject subject) {
+        this.subject = subject;
+        this.subject.addObserver(this);
+    }
+    @Override
+    public void update() {
+        System.out.println("State changed: " + subject.getState());
+    }
+}
+

@@ -1,0 +1,83 @@
+CircuitBreaker:
+ CircuitBreaker ek finite state machine ki tarah kaam karta hai. Matlab, iske kuch states hote hain aur ye decide karta hai ki system ko requests allow karni chahiye ya nahi based on recent failures.
+
+Normal states:
+
+1. CLOSED → Sab kuch normal hai, requests ja rahi hain. Agar failures zyada hote hain to ye OPEN state me chala jata hai.
+
+2. OPEN → Circuit breaker ne system ko protect karne ke liye requests block kar di hain. Failures ke chance zyada hai.
+
+3. HALF_OPEN → System ko test karne ka state. Kuch requests allow ki jati hain. Agar wo successful hoti hain to circuit wapas CLOSED ho jata hai, nahi to OPEN me wapas chala jata hai.
+
+Special states:
+
+1. METRICS_ONLY → Ye sirf metrics collect karta hai, requests block nahi karta.
+
+2. DISABLED → CircuitBreaker completely disable hai, sab requests ja rahi hain.
+
+3. FORCED_OPEN → CircuitBreaker ko manually OPEN kar diya gaya hai, sab requests block hain.
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Sliding Window
+
+CircuitBreaker ye decide karne ke liye ki state change karna hai ya nahi, recent calls ka outcome track karta hai. Ye outcome store hota hai sliding window me.
+
+🧠 short summary:
+
+CircuitBreaker ye decide karta hai ki system “healthy” hai ya “problematic”.
+Iske liye wo recent performance track karta hai ek sliding window me.
+
+Sliding window ek “memory” hoti hai jo recent calls ka record rakhti hai — kitne successful hue aur kitne fail hue.
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+⚙️ Type 1: Count-based Sliding Window
+🧩 Explanation:
+
+Ye window sirf number of recent calls (N calls) ko track karti hai.
+Example: last 10 requests dekhega — unme se kitne success aur kitne fail hue.
+
+Agar failure ratio zyada ho gaya (maan lo 50% se zyada), to CircuitBreaker OPEN ho jata hai — matlab aage requests temporarily block kar dega taaki system overload na ho.
+
+💡 Analogy (Real-Life Example):
+
+Socho tumhara ek food delivery app hai aur tum daily 10 orders check karte ho:
+
+Agar last 10 me se 5 orders delay hue ya cancel hue 🍕❌,
+tum decide karte ho: “System me problem hai, abhi aur orders accept mat karo.”
+→ Ye hi CircuitBreaker ka OPEN hona hai.
+
+Aur jab kuch time baad system theek lagta hai (HALF_OPEN me test hota hai), tab wapas CLOSED ho jata hai aur requests normal chalti hain.
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+⏱️ Type 2: Time-based Sliding Window
+🧩 Explanation:
+
+Ye window time duration (N seconds) ke basis par check karti hai — jaise “last 60 seconds me kya hua”.
+
+Isme number of requests fixed nahi hota, balki time window fixed hoti hai.
+Agar last 60 seconds me zyada failures aaye, to breaker OPEN ho jayega.
+
+💡 Analogy (Real-Life Example):
+
+Socho tum ek bank website chalate ho 🏦.
+Agar last 60 seconds me users ke 30% login attempts fail hue (maybe server issue),
+to tum temporarily login requests block kar doge — taaki backend crash na ho.
+→ Ye hai time-based sliding window — recent time ke performance ke base pe decision lena.
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+📊 Comparison Table
+-----------------------------------------------------------------------------------------------------------------
+| Type            | Base                | Example                           | Real-life Analogy                 |
+| --------------- | ------------------- | --------------------------------- | --------------------------------- |
+| **Count-based** | Last **N requests** | Last 10 requests me se 5 fail hue | Last 10 food orders delay hue     |
+| **Time-based**  | Last **N seconds**  | Last 60 sec me zyada failure aaye | Last 1 minute me zyada login fail |
+-----------------------------------------------------------------------------------------------------------------
+
+🧠 Simple way to remember:
+
+* Count-based → “Mujhe bas last kitni calls hui wo dekhni hain.”
+
+* Time-based → “Mujhe bas last kitne seconds me kya hua wo dekhna hai.”
+
+
+
+
+

@@ -1,0 +1,58 @@
+🌳 Linux File System Hierarchy (Tree Structure)
+=====================================================
+/
+├── bin/
+├── boot/
+├── dev/
+├── etc/
+├── home/
+├── lib/
+├── media/
+├── mnt/
+├── opt/
+├── proc/
+├── root/
+├── run/
+├── sbin/
+├── srv/
+├── sys/
+├── tmp/
+├── usr/
+└── var/
+
+📁 Important Directories and Their Purpose
+------------------------------------------------------------------------------------------------
+| Directory | Purpose                                                                          |
+| --------- | -------------------------------------------------------------------------------- |
+| `/`       | Root directory. Everything starts here.                                          |
+| `/bin`    | Essential **user binaries** (e.g., `ls`, `cp`, `mv`) needed for basic operation. |
+| `/boot`   | Boot loader files like the Linux kernel (`vmlinuz`) and `grub`.                  |
+| `/dev`    | Device files (e.g., `/dev/sda`, `/dev/usb0`) to interact with hardware.          |
+| `/etc`    | Configuration files for the system and installed services.                       |
+| `/home`   | User directories (e.g., `/home/muheeb`). Each user stores their files here.      |
+| `/lib`    | Shared libraries for binaries in `/bin` and `/sbin`. Like `.dll` in Windows.     |
+| `/media`  | Mounted external media (e.g., USB drives, CDs).                                  |
+| `/mnt`    | Temporary mount point for mounting filesystems manually.                         |
+| `/opt`    | Optional software and add-on application packages.                               |
+| `/proc`   | Virtual filesystem for **process and kernel info** (e.g., `/proc/cpuinfo`).      |
+| `/root`   | Home directory for the **root (superuser)**.                                     |
+| `/run`    | Runtime data since system boot (e.g., service PIDs, system state).               |
+| `/sbin`   | System binaries used for **administration** (e.g., `ifconfig`, `reboot`).        |
+| `/srv`    | Data for services (e.g., web server data).                                       |
+| `/sys`    | Interface with the kernel. Replaced many `/proc` entries.                        |
+| `/tmp`    | Temporary files. Usually cleared at reboot.                                      |
+| `/usr`    | Secondary hierarchy for user data and applications.                              |
+| `/var`    | Variable data like logs (`/var/log`), mail, cache, etc.                          |
+------------------------------------------------------------------------------------------------
+
+🧠 Forward-Thinking Notes :
+==========================
+Linux treats everything as a file: hardware, processes, text files, etc.
+
+You can mount multiple storage devices into any directory using the mount command.
+
+With Docker, containers often rely on minimal file systems, e.g., using Alpine Linux.
+
+In the cloud and DevOps era, understanding /var/log, /etc, and /proc is crucial for debugging, monitoring, and automation.
+
+

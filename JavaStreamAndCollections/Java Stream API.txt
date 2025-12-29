@@ -1,0 +1,469 @@
+Java Stream API ek powerful feature hai jo Java 8 mein introduce hua tha. Iska use data ko process karne ke liye hota hai, jaise filtering, mapping, sorting, etc., bina loop likhe functional style mein.
+
+🔄 Analogy :
+==========
+Socho tumhare paas ek pani ka pipe (pipeline) hai, aur tum usmein kuch filters lagate ho – jaise ek filter sirf garam paani aane dega, doosra color change karega, teesra flow badhaye.
+
+Bas waise hi, Stream ek pipeline of operations hai, jahan tum data ke upar step-by-step transformation ya processing kar sakte ho.
+================================================================================================================================
+
+✅ Stream ke Features:
+======================
+   1. Data source se stream banti hai (like List, Set, Arrays, etc.)
+   2. Stream immutable hoti hai (original data change nahi hota)
+   3. Stream lazy hoti hai (jab tak terminal operation nahi chalega, kuch nahi hoga)
+   4. Stream parallel bhi ho sakti hai
+   
+================================================================================================================
+
+🔹Stream Banane ke Tarike:
+==========================
+List<String> names = Arrays.asList("Muheeb", "Ali", "Zaid");
+Stream<String> stream = names.stream();
+
+========================================================
+
+🔸Common Stream Operations:
+1. filter() - kuch elements ko condition ke basis par rakhna
+
+List<String> names = Arrays.asList("Muheeb", "Ali", "Ahmed");
+
+List<String> result = names.stream()
+    .filter(name -> name.startsWith("A"))
+    .collect(Collectors.toList());
+
+System.out.println(result); // Output: [Ali, Ahmed]
+
+➡️ Analogy: Tumhare paas fruits hain, filter se sirf "apple" nikalna hai.
+=============================================================
+2. map() - har element ko transform karna
+
+List<String> names = Arrays.asList("muheeb", "ali", "ahmed");
+
+List<String> upper = names.stream()
+    .map(String::toUpperCase)
+    .collect(Collectors.toList());
+
+System.out.println(upper); // Output: [MUHEEB, ALI, AHMED]
+
+➡️ Analogy: Sabhi letters ko capital letters mein convert karna jaise chhoti sabziyon ko bade size mein badalna.
+==================================================================================================
+3. sorted() - sort karna
+
+List<Integer> numbers = Arrays.asList(3, 1, 4, 2);
+
+List<Integer> sorted = numbers.stream()
+    .sorted()
+    .collect(Collectors.toList());
+
+System.out.println(sorted); // Output: [1, 2, 3, 4]
+==================================================================================================
+
+4. collect() - result ko list, set, map mein convert karna
+
+List<String> names = Arrays.asList("Ali", "Ahmed");
+
+Set<String> set = names.stream()
+    .collect(Collectors.toSet());
+
+🧠 Explanation :
+==============
+    names ek list hai: ["Ali", "Ahmed"]
+
+    stream() us list ko ek stream mein convert karta hai
+
+    collect(Collectors.toSet()) stream ke elements ko Set mein convert karta hai
+
+⚠️ Important Notes:
+
+    Set is unordered (i.e., elements ka order guarantee nahi hota)
+
+    Lekin in this case, output generally dikhega as [Ali, Ahmed] but kisi JVM pe order [Ahmed, Ali] bhi aa sakta hai, kyunki HashSet order maintain nahi karta.
+=======================================================================================================
+5. forEach() - har element pe action lena (mostly terminal operation)
+
+List<String> names = Arrays.asList("Ali", "Ahmed");
+
+names.stream()
+    .forEach(System.out::println);
+
+=======================================================================================================
+6. count() - kitne elements hain
+long count = names.stream()
+    .filter(name -> name.length() > 3)
+    .count();
+========================================================================================================
+7. findFirst() - pehla matching element
+Optional<String> first = names.stream()
+    .filter(name -> name.startsWith("A"))
+    .findFirst();
+
+=========================================================================================================
+
+8. reduce() - combine karna values ko
+List<Integer> numbers = Arrays.asList(1, 2, 3, 4);
+
+int sum = numbers.stream()
+    .reduce(0, (a, b) -> a + b);
+
+System.out.println(sum); // Output: 10
+➡️ Analogy: 4 logon ne donation diya, reduce() sabka total nikalta hai.
+==========================================================================================================
+
+🚫 Stream ke Rules:
+===================
+    1. Stream ek baar hi use ho sakti hai (consume hone ke baad expire)
+    2. Intermediate operations (like filter, map) lazy hote hain
+    3. collect, forEach, reduce jaise operations terminal hote hain (stream ko end kar dete hain)
+    
+===========================================================================================================
+🧠 Use Case Example (Real Life):
+==================================
+class Product {
+    String name;
+    double price;
+    Product(String name, double price) {
+        this.name = name;
+        this.price = price;
+    }
+}
+
+List<Product> products = Arrays.asList(
+    new Product("Laptop", 50000),
+    new Product("Mouse", 500),
+    new Product("Keyboard", 800)
+);
+
+// Filter products > 1000
+List<String> expensiveProductNames = products.stream()
+    .filter(p -> p.price > 1000)
+    .map(p -> p.name)
+    .collect(Collectors.toList());
+
+System.out.println(expensiveProductNames); // [Laptop]
+
+======================================================
+🔚 Summary:
+======================================================================================
+| Stream Operation | Kya Karta Hai                  | Example                        |
+| ---------------- | ------------------------------ | ------------------------------ |
+| `filter()`       | Chhantna (jaise sieve)         | `filter(n -> n > 5)`           |
+| `map()`          | Badalna har element ko         | `map(s -> s.toUpperCase())`    |
+| `sorted()`       | Sorting                        | `sorted()`                     |
+| `forEach()`      | Har element pe action          | `forEach(System.out::println)` |
+| `collect()`      | Final list ya set banana       | `collect(Collectors.toList())` |
+| `count()`        | Ginti karna                    | `count()`                      |
+| `reduce()`       | Sab ko mila ke ek value banana | `reduce(0, (a,b) -> a + b)`    |
+======================================================================================
+
+💡 Terminal Operation ka Matlab:
+
+Stream ke upar jab tum koi operation lagate ho, to wo do type ka ho sakta hai:
+
+==========================================================================================================================
+| Type                          | Naam                                 | Kya karta hai?                                    |
+| ---------------------------- -| ------------------------------------ | ------------------------------------------------- |
+| ✅ **Intermediate Operation** | `filter()`, `map()`, `sorted()`      | Sirf stream ko prepare karta hai (lazy hota hai)  |
+| 🔚 **Terminal Operation**     | `collect()`, `forEach()`, `reduce()` | **Stream ko execute** karta hai aur **close** bhi |
+==========================================================================================================================
+
+🔁 Java Stream Life-Cycle (Visual Flow)
+
+       Source
+        List<String> names = Arrays.asList("muheeb", "ali", "ahmed");
+
+              |
+              v
+        names.stream()          ← Stream bana
+              |
+              v
+     .filter(name -> name.length() > 3)   ← Intermediate operation
+              |
+              v
+     .map(String::toUpperCase)            ← Intermediate operation
+              |
+              v
+     .collect(Collectors.toList())        ← ✅ Terminal operation
+              |
+              v
+    🔚 Result: ["MUHEEB", "AHMED"]
+
+
+🔄 Operation Types Summary:
+==============================================================================================================
+| Operation Type   | Method Examples                      | Kya karta hai?                                   |
+| ---------------- | ------------------------------------ | ------------------------------------------------ |
+| **Intermediate** | `filter()`, `map()`, `sorted()`      | Sirf stream ko prepare karta hai (lazy hota hai) |
+| **Terminal**     | `collect()`, `forEach()`, `reduce()` | Stream ko execute + close karta hai              |
+==============================================================================================================
+
+📌 Visual Analogy: Water Purification System
+============================================
+             💧 Pani ka source
+                   |
+         +--------------------+
+         |     stream()       | ← Tap khola
+         +--------------------+
+                   |
+        +---------------------+
+        |     filter()        | ← Ganda paani hatao
+        +---------------------+
+                   |
+        +---------------------+
+        |      map()          | ← Taste badlo
+        +---------------------+
+                   |
+        +-----------------------------+
+        |  collect() → glass mein bhar do  | ✅
+        +-----------------------------+
+                   |
+               🥤 Fresh paani = Final result
+              
+Jaise hi paani glass mein bhar gaya (collect()), pura system chalu ho gaya. Ab dobara wahi stream (pipe) use nahi kar sakte — naya stream banana padega.
+=======================================================================================================================================================
+
+1️⃣ Streams kya hai?
+
+* Stream ek sequence of elements hai jo aap functional style me process kar sakte ho.
+
+* Matlab, aap loops ki jagah functions use karke list/map/array ke elements ko handle kar sakte ho.
+
+* Stream me operations lazy hote hai — matlab jab tak collect() ya forEach() call nahi hota, kuch execute nahi hota.
+
+Simple example : 
+===============
+List<Integer> numbers = List.of(1, 2, 3, 4, 5);
+
+// Traditional way
+for (int n : numbers) {
+    System.out.println(n);
+}
+
+// Stream way
+numbers.stream().forEach(n -> System.out.println(n));
+✅ Same output, but functional style.
+
+2️⃣ Stream ke basic operations
+
+Streams ke 2 types ke operations hote hai:
+
+1. Intermediate operations (ye chain me lagate ho, lazy):
+
+	* filter() → condition lagane ke liye
+
+	* map() → value transform karne ke liye
+
+	* sorted() → sorting ke liye
+
+	* limit() → top N ya limit karne ke liye
+
+2. Terminal operations (ye stream ko execute karte hai):
+
+	* collect() → result ko list/map me convert karna
+
+	* forEach() → iterate kar ke print karna
+
+	* count() → total elements ka count
+------------------------------------------------------------
+Example: Filter + Map + Collect
+===============================
+List<String> names = List.of("Muheeb", "Riyaan", "Ameer");
+
+// Sirf naam jo 5 letters se zyada hai
+List<String> longNames = names.stream()
+                              .filter(n -> n.length() > 5) // intermediate
+                              .map(String::toUpperCase)   // intermediate
+                              .toList();                  // terminal
+
+System.out.println(longNames); // [MUHEEB, RIYAAN]
+-------------------------------------------------------
+
+3️⃣ Top 3 salaries per department ka logic breakdown
+
+Ab tumhare big block ko chhote-chhote steps me todte hai:
+
+Step 1: Group by department
+****************************************************************
+Map<String, List<Employee>> byDept = employees.stream()
+    .collect(Collectors.groupingBy(Employee::getDepartment));
+****************************************************************
+* Yaha hum department ke according employees group kar rahe hai.
+Example output:
+===============
+Software Developer -> [Muheeb, Ameer]
+HR Head            -> [Affan, Aiza]
+
+--------------------------------------------------------------------
+Step 2: Sort each group by salary descending
+
+*****************************************************************************************************
+byDept.forEach((dept, list) -> {
+    List<Employee> sorted = list.stream()
+                                .sorted(Comparator.comparingDouble(Employee::getSalary).reversed())
+                                .toList();
+    System.out.println(dept + ": " + sorted);
+});
+******************************************************************************************************
+* Yaha hum har department ke employees ko salary ke hisab se sort kar rahe hai descending order me.
+
+* Comparator.comparingDouble(Employee::getSalary).reversed() ka matlab: salary ke hisab se sort, largest first.
+
+---------------------------------------------------------------------------------------------------------
+
+Step 3: Pick top 3
+-------------------
+******************************************************************************************************
+List<Employee> top3 = list.stream()
+                          .sorted(Comparator.comparingDouble(Employee::getSalary).reversed())
+                          .limit(3)
+                          .toList();
+*******************************************************************************************************
+
+ * limit(3) matlab sirf first 3 elements pick karo.
+
+----------------------------------------------------------------------------------------
+Step 4: Combine everything
+*********************************************************************************************************************
+Map<String, List<Employee>> topThreeByDept = employees.stream()
+    .collect(
+        groupingBy(
+            Employee::getDepartment,            // Step 1: group by dept
+            collectingAndThen(
+                toList(),
+                list -> list.stream()
+                            .sorted(Comparator.comparingDouble(Employee::getSalary).reversed()) // Step 2 + 3
+                            .limit(3)
+                            .toList()
+            )
+        )
+    );
+***********************************************************************************************************************
+
+	* collectingAndThen ka kaam: group karne ke baad, us group pe extra operation apply karna.
+
+	* Matlab: “Group by department, fir top 3 salaries pick karo.”
+	
+--------------------------------------------------------------------------------------------------
+✅ Tip to remember
+
+Streams = Pipeline
+Think of it as pipe:
+
+List<Employee> -> stream() -> group by dept -> sort -> limit 3 -> collect()
+
+ * Intermediate operations → filter, map, sort (lazy, chainable)
+
+ * Terminal operations → toList(), forEach() (execute everything)
+ 
+ ==========================================================================================================================
+ Step 0: Dataset
+ 
+ List<Employee> employees = List.of(
+    new Employee("Muheeb Pasha", "Software Developer", 57000),
+    new Employee("Ameer Suhail", "Software Developer", 65000),
+    new Employee("Mohammed Maaz", "Business Developer", 45000),
+    new Employee("Mohammed Hanzalah", "Business Developer", 18000),
+    new Employee("Riyaan Ahmed", "Data Engineer", 65000),
+    new Employee("Mohammed Arham", "Data Engineer", 20000)
+);
+
+Step 1: Create Stream
+
+employees.stream()
+
+ * Ab hum functional pipe start kar rahe hain.
+
+ * Har employee ab stream me travel karega.
+ 
+Step 2: Group by Department
+
+groupingBy(Employee::getDepartment)
+
+Pipe flow:
+
+Software Developer -> [Muheeb Pasha, Ameer Suhail]
+Business Developer -> [Mohammed Maaz, Mohammed Hanzalah]
+Data Engineer      -> [Riyaan Ahmed, Mohammed Arham]
+
+Step 3: Sort by Salary (Descending)
+
+sorted(Comparator.comparingDouble(Employee::getSalary).reversed())
+
+Each group after sorting:
+
+Software Developer -> [Ameer Suhail (65000), Muheeb Pasha (57000)]
+Business Developer -> [Mohammed Maaz (45000), Mohammed Hanzalah (18000)]
+Data Engineer      -> [Riyaan Ahmed (65000), Mohammed Arham (20000)]
+
+Step 4: Pick Top 3
+
+limit(3)
+
+* Yaha 3 tak ke elements pick ho rahe hain.
+
+* Agar department me < 3 employees hai, sab pick ho jaayenge.
+
+Software Developer -> top 2: [Ameer Suhail, Muheeb Pasha]
+Business Developer -> top 2: [Mohammed Maaz, Mohammed Hanzalah]
+Data Engineer      -> top 2: [Riyaan Ahmed, Mohammed Arham]
+
+Step 5: Collect Results
+
+.collect(Collectors.collectingAndThen(toList(), ...))
+
+* Har group ka final list create hota hai.
+
+* Result: Map<String, List<Employee>>
+
+{
+    "Software Developer": [Ameer Suhail, Muheeb Pasha],
+    "Business Developer": [Mohammed Maaz, Mohammed Hanzalah],
+    "Data Engineer": [Riyaan Ahmed, Mohammed Arham]
+}
+
+Step 6: Print
+
+topThreeByDept.forEach((dept, empList) -> {
+    System.out.println(dept + ": " + empList);
+});
+
+Output:
+
+Software Developer: [Ameer Suhail (65000.0), Muheeb Pasha (57000.0)]
+Business Developer: [Mohammed Maaz (45000.0), Mohammed Hanzalah (18000.0)]
+Data Engineer: [Riyaan Ahmed (65000.0), Mohammed Arham (20000.0)]
+
+====================================================================
+
+💡 Visual Flow (Pipeline)
+
+Employees List
+      |
+      v
+Stream() ---> group by Department ---> each list sorted by Salary desc ---> limit(3)
+      |
+      v
+Map<String, List<Employee>> topThreeByDept
+
+====================================================================
+int N = 3;
+.limit(N)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,39 @@
+🎯 Project Overview: StudentManagementSystem.java
+Features
+
+✅ Add new students
+✅ View all students
+✅ Search student by ID
+✅ Update student info
+✅ Delete student
+✅ Exit the program
+
+We’ll store all students in a HashMap<Integer, Student> —
+where the key is student ID and value is a Student object.
+
+🧩 Step 1: Define the Student class
+
+🧠 Step 2: StudentManagementSystem.java (with File Persistence)
+
+
+💡 Concepts Used
+
+HashMap<Integer, Student> → for efficient CRUD
+
+entrySet() iteration
+
+Encapsulation with Student class
+
+Java 17+ switch expressions
+
+Basic input handling with Scanner
+
+🧰 Concepts Covered
+
+HashMap for in-memory CRUD operations
+
+ObjectOutputStream / ObjectInputStream for saving data
+
+Exception handling for file I/O
+
+Menu-driven console UI

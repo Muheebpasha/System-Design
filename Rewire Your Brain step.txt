@@ -1,0 +1,192 @@
+Rewire Your Brain
+==========================================
+🔥 Chapter 1: Firing the Right Cells Together
+
+👉 “Jo neurons saath-saath fire karte hain, wo saath-saath wire ho jaate hain.”
+Matlab: Jo cheez aap baar-baar karte ho, wahi aapka brain strong bana leta hai.
+
+Step 1: Focus
+
+Brain wahi strong karta hai jahan attention hoti hai
+
+Jab aap distract hote ho → weak wiring
+
+Jab full focus hota hai → strong wiring
+
+📌 Example:
+Agar aap coding seekhte waqt mobile side mein rakh ke karoge → slow progress
+Agar 40 min deep focus → fast learning
+
+Step 2: Effort
+
+Brain ko change hone ke liye thoda struggle chahiye
+
+Comfort zone mein brain grow nahi karta
+
+📌 Example:
+Leetcode ka hard question = brain gym 🏋️
+Jitna effort → utni neural growth
+
+Step 3: Effortlessness
+
+Baar-baar practice se kaam automatic ho jaata hai
+
+Starting mein hard → baad mein flow
+
+📌 Example:
+Pehle Java Streams confusing
+Ab map/filter dekh ke hi samajh aa jaata
+
+Step 4: Determination
+
+Result slow hota hai, isliye consistency important
+
+Brain wiring time leti hai
+
+📌 Mantra:
+
+Daily thoda thoda, par roz
+====================================================================
+😨 Chapter 2: Controlling Your Amygdala
+
+👉 Amygdala = fear + stress + anxiety center
+
+Jab Amygdala control mein nahi hoti:
+
+Overthinking
+
+Interview fear
+
+“Mujhse nahi hoga” thoughts
+
+Control kaise kare?
+
+✔ Slow breathing (4-6 sec inhale, 6-8 sec exhale)
+✔ Name the emotion: “Mujhe dar lag raha hai”
+✔ Logic activate karo → problem ko steps mein todo
+
+📌 Example:
+Interview se pehle panic ❌
+Interview ko questions + answers + examples mein break karo ✅
+
+😊 Chapter 3: Creating Positive Mood
+
+👉 Positive mood = fast learning + better memory
+
+Step 1: Keep Smile on Face
+
+Fake smile bhi brain ko signal deta hai: “Sab theek hai”
+
+Step 2: Light Chemistry
+
+Sunshine 🌞
+
+Fresh air
+
+Natural light
+
+Ye dopamine & serotonin boost karta hai
+
+Step 3: Aerobic Boosting
+
+Walk, jogging, skipping
+
+Blood + oxygen = brain power 🚀
+
+📌 Sirf 20 min walk = focus + mood improve
+
+Step 4: Creating Narratives
+
+Apni life ko story samjho, failure ko villain nahi lesson banao
+
+❌ “Main weak hoon”
+✅ “Main abhi training phase mein hoon”
+
+Step 5: Wiring Positive Thinking
+
+Thoughts repeat honge → wiring strong hogi
+
+Negative self-talk ko replace karo
+
+📌 Replace Rule:
+
+Negative → Neutral → Positive
+
+===============================================================
+🧠 Chapter 4: Cultivating Memory
+
+👉 Memory = attention + emotion + repetition
+
+Memory strong karne ke rules:
+
+✔ Ek time pe ek cheez
+✔ Visualize karo
+✔ Explain karo kisi aur ko
+✔ Spaced repetition
+
+📌 Example:
+
+Java concept padho
+
+Uska example likho
+
+Kisi ko samjhao (ya khud ko)
+===================================================================
+🔁 Chapter 5: Rewire the Mind in Healthy Habits
+
+👉 Habits = autopilot of brain
+
+Habit ka structure:
+
+* Cue → Routine → Reward
+
+📌 Example:
+
+* Cue: Subah uthna
+
+* Routine: 30 min DSA
+
+* Reward: Coffee / Music
+
+Rule:
+
+* Habits ko chhota rakho
+
+Environment ko change karo, willpower pe depend mat karo
+======================================================================
+🎯 Final Summary (One Line per Chapter)
+
+1️⃣ Focus + effort = brain wiring
+2️⃣ Fear ko observe karo, obey mat karo
+3️⃣ Positive mood = fast learning
+4️⃣ Memory grows by usage, not reading
+5️⃣ Small habits daily = big brain change
+
+=======================================================================
+
+
+
+
+
+
+
+
+
+
+Chapter 1: Firing the right cells together.
+==========================================
+	Step 1: Focus
+	Step 2: Effort
+	Step 3: Effortlessness
+	Step 4: Determination
+	
+Chapter 2: Controlling Your Amygdala
+Chapter 3: Creating Positive Mood
+	Step 1: Keep Smile on face.
+	Step 2: Light Chemistry
+	Step 3: Aerobic Boosting
+	Step 4: Creating Narratives.
+	Step 5: Wiring Positive Thinking.
+	
+Chapter 4: Cultivating Memory
+Chapter 5: Rewire the mind in healthy habits.

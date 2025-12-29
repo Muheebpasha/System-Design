@@ -1,0 +1,106 @@
+✅ What is a Java Record?
+
+A record is a special kind of class (introduced in Java 16) used to store data only, without writing boilerplate code.
+
+❤️ A record is basically:
+
+✔ a class
+✔ with final fields
+✔ with auto-generated:
+ • constructor
+ • getters
+ • toString()
+ • equals()
+ • hashCode()
+ 
+📌 Your Record
+record DeptSalaryKey(String dept, String range) {}
+
+This automatically generates:
+final class DeptSalaryKey {
+    private final String dept;
+    private final String range;
+
+    public DeptSalaryKey(String dept, String range) {
+        this.dept = dept;
+        this.range = range;
+    }
+
+    public String dept() { return dept; }
+    public String range() { return range; }
+
+    @Override public boolean equals(Object o) { ... }
+    @Override public int hashCode() { ... }
+    @Override public String toString() { ... }
+}
+So you did not need to write all this manually.
+
+✅ Why do we use a record here?
+Because you want to group by two things at the same time:
+
+dept
+
+salary range (HIGH / LOW)
+
+Grouping only allows one key.
+So we create a combined (composite) key.
+
+🎯 Example
+
+If you have these employees:
+-------------------------
+| Name  | Dept | Salary |
+| ----- | ---- | ------ |
+| John  | IT   | 50,000 |
+| Aman  | IT   | 80,000 |
+| Sara  | HR   | 45,000 |
+| Nitin | HR   | 70,000 |
+-------------------------
+We convert salary → "HIGH" or "LOW":
+John → LOW
+Aman → HIGH
+Sara → LOW
+Nitin → HIGH
+
+So grouping key becomes:
+
+new DeptSalaryKey("IT", "LOW")
+new DeptSalaryKey("IT", "HIGH")
+new DeptSalaryKey("HR", "LOW")
+new DeptSalaryKey("HR", "HIGH")
+
+🔥 Grouping Code
+
+Map<DeptSalaryKey, List<Employee>> grouped =
+        employees.stream()
+                 .collect(Collectors.groupingBy(
+                     e -> new DeptSalaryKey(e.getDept(), range(e.getSalary()))
+                 ));
+
+This produces a map like:
+{
+  DeptSalaryKey[dept=IT, range=LOW] = [John],
+  DeptSalaryKey[dept=IT, range=HIGH] = [Aman],
+  DeptSalaryKey[dept=HR, range=LOW] = [Sara],
+  DeptSalaryKey[dept=HR, range=HIGH] = [Nitin]
+}
+
+🧠 Simple Analogy
+
+Imagine grouping students by:
+
+* Class (10th / 12th)
+
+* Section (A / B)
+
+You need a key like (class, section).
+
+Record gives you this key in one line:
+
+record ClassSection(String cls, String sec) {}
+
+✅ TL;DR
+
+record DeptSalaryKey(String dept, String range) means:
+
+“A simple class that holds dept + range together, with auto-generated code.”

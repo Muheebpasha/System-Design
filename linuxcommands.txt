@@ -1,0 +1,138 @@
+PS1='\W$ '
+
+✅ 1. Check Docker service status
+
+sudo systemctl status docker
+
+✅ 2. Use docker info
+sudo docker info
+
+✅ 3. Check running containers (even if none are running)
+sudo docker ps
+
+✅ 4. Verify with systemctl is-active
+sudo systemctl is-active docker
+
+ps aux | grep mongod
+
+This is a common Linux command used to check if a process (in this case, mongod) is running.
+
+ps => Process Status => Shows currently running processes
+
+aux (options to ps) :
+aux is a flag 
+
+a => Show processes for all users, not just the current one.
+u => Show the user who started each process.
+x => Show processes not attached to a terminal (e.g., daemons, background tasks like mongod).
+
+✅ | (pipe)
+* Takes the output of the command on the left (ps aux)
+* Sends it as input to the command on the right (grep mongod)
+
+✅ grep mongod
+* Searches for lines that contain the word mongod
+* mongod is the MongoDB daemon process — the background server that listens for connections
+
+=========================================
+
+Kill the process manually: sudo kill -9 31188 
+Then confirm it's no longer using the port: sudo lsof -i :8080
+
+Run Docker container : sudo docker run -p 8080:8080 journal-app
+
+Rebuild Docker image (if you’re running via Docker): sudo docker build -t journal-app .
+================================================
+everytime i need to follow this steps
+1. Save the file
+2. Rebuild the JAR
+./mvnw clean package
+3. Rebuild Docker image
+sudo docker build -t journal-app
+4. Run container again
+sudo docker run -p 8080:8080 journal-app
+===============================================
+./mvnw clean package : is used to build your Spring Boot (or any Maven-based) project using the Maven Wrapper (mvnw).
+
+=============================================
+sudo docker run -p 8080:8080 -v "$PWD/target/journalApp-0.0.1-SNAPSHOT.jar:/app/app.jar" openjdk:21-jdk-slim java -jar /app/app.jar
+=========================================
+sudo docker compose down
+sudo docker compose build
+
+so avoid this use
+sudo docker compose up 
+
+Remove the Existing mongodb Container
+sudo docker rm -f mongodb
+
+sudo docker compose up -d
+sudo docker ps -a
+sudo docker exec -it journalapp-journal-app-1 sh
+
+
+whenever i modify the code then i need perform
+./mvnw clean package
+sudo docker compose down
+sudo docker compose up --build
+
+curl -X POST http://localhost:8080/journal \
+     -H "Content-Type: application/json" \
+     -d '{"id":1,"title":"My First Entry","content":"Hello journal!"}'
+     
+========================================================================
+sudo docker start mongodb
+sudo docker exec -it mongodb mongosh
+====================================
+echo "alias mongoconnect='sudo docker exec -it mongodb mongosh'" >> ~/.bashrc
+source ~/.bashrc
+=========================================================================
+Understanding and using Linux commands (like ps, ls, grep, chmod, kill, find, etc.) requires knowledge of:
+1. The Linux file system
+2. Processes, users, and permissions
+3. Shell scripting
+4. Text processing tools like awk, sed, grep
+
+grep -R "url(" config/
+grep -R "asset(" config/
+grep -R "route(" config/
+
+grep -rnw . -e 'https://aiapi-arabia.greynium.com/liquorapi'
+
+🔍 Explanation:
+
+    grep: search utility
+
+    -r: recursive (search all subdirectories)
+
+    -n: show line number
+
+    -w: match whole words (optional here)
+
+    .: current directory (you can replace with specific path)
+
+    -e: pattern to search
+    
+===============================================================================
+| Command              | Meaning                                              |
+| -------------------- | ---------------------------------------------------- |
+| `chmod u+w file.txt` | Add write permission to the owner                    |
+| `chmod g-w file.txt` | Remove write permission from the group               |
+| `chmod o+r file.txt` | Add read permission for others (world)               |
+| `chmod a+x file.sh`  | Add execute permission for all (user, group, others) |
+===============================================================================
+
+u → user (the file owner)
+
++ → add
+
+w → write permission
+
+r → read permission
+
+- → remove permission(minus)
+
+a → All (user,group,others)
+=======================================================================================
+
+

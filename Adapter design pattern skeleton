@@ -1,0 +1,36 @@
+// Target Interface - defines the expected interface by the client
+public interface Target {
+    void request();
+}
+
+// Adaptee - existing class with incompatible interface
+public class Adaptee {
+    public void specificRequest() {
+        // Existing functionality
+    }
+}
+
+// Adapter - adapts Adaptee to Target interface
+public class Adapter implements Target {
+    private Adaptee adaptee;
+
+    public Adapter(Adaptee adaptee) {
+        this.adaptee = adaptee;
+    }
+
+    @Override
+    public void request() {
+        // Translate the request to the adaptee's method
+        adaptee.specificRequest();
+    }
+}
+
+// Client - uses Target interface
+public class Client {
+    public static void main(String[] args) {
+        Adaptee adaptee = new Adaptee();
+        Target target = new Adapter(adaptee);
+        target.request();
+    }
+}
+

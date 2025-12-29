@@ -1,0 +1,45 @@
+🔥 Git Branch Kya Hota Hai?
+
+Git branch ek parallel line of development hoti hai jahan aap main codebase ko touch kiye bina naye features, bug fixes ya experiments kar sakte ho.
+
+Analogy (उदाहरण से समझो):
+Socho tumhare paas ek main highway (main branch) hai. Agar tumhe naya flyover (feature) banana hai, to kya tum highway band karoge? Nahi! Tum ek temporary road (branch) banaoge, wahan kaam complete karoge, aur jab ready ho jaaye, tab use wapas main highway se jod doge (merge karoge).
+
+===================================================================================================================================
+✅ Benefits of Using Git Branch (Fayde)
+
+    Parallel Development – Alag-alag developers alag-alag features par kaam kar sakte hain bina ek dusre ka code todhe.
+
+    Safe Experimentation – Code test kar sakte ho bina production branch (main) ko todhe.
+
+    Easy Collaboration – Har developer apne kaam ke liye alag branch bana sakta hai.
+
+    Cleaner History – Git history zyada readable hoti hai (har branch ka purpose clear hota hai).
+
+    CI/CD Friendly – Alag branches ko auto test/run karke verify kiya ja sakta hai.
+    
+===================================================================================================================================
+⚙️ How to Use Git Branch (Kaise Use Karein)?
+📌 1. Branch Create Karna:
+git branch my-feature
+
+📌 2. Branch Switch Karna:
+git checkout my-feature
+# ya naya tarika:
+git switch my-feature
+
+📌 3. Branch Mein Code Add Karna:
+git add .
+git commit -m "Added new feature"
+
+📌 4. Merge Branch to Main (Kaam Khatam Karne ke baad):
+git checkout main
+git merge my-feature
+
+📌 5. Branch Delete Karna (Optional):
+git branch -d my-feature
+
+
+
+
+

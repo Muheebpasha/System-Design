@@ -1,0 +1,134 @@
+🌐 Observability kya hoti hai?
+
+Observability ka matlab hota hai —
+ "System ke andar kya chal raha hai, wo bahar se samajh paana"
+yaani agar system me problem ho, to bina directly andar ghuse hue (like debugging code), hum logs, metrics, aur traces se uska reason samajh sakein.
+
+Observability ke 3 main pillars hote hain:
+
+1. Logs → kya hua? (text format me details)
+
+2. Metrics → system ka performance kaisa hai? (numbers me)
+
+3. Traces → ek request ne system me kaunse components touch kiye?
+
+📊 Prometheus kya hai?
+
+ Prometheus ek open-source monitoring aur metrics collection tool hai, jo system ke metrics ko collect, store aur query karne ke liye use hota hai.
+Ye observability ke metrics pillar ko implement karta hai.
+
+Soch lo Prometheus ek smart data collector hai — jo tumhare servers, applications, aur microservices se numbers collect karta hai jaise:
+
+* CPU usage
+
+* Memory usage
+
+* Request count
+
+* Error rate
+
+* Response time
+etc.
+
+⚙️ Prometheus kaam kaise karta hai?
+
+Step by step samjho 👇
+
+1. Metrics Exposure
+
+Tumhara application apni metrics expose karta hai ek HTTP endpoint pe (usually /metrics).
+Example:
+Spring Boot app me tum use karte ho Micrometer + Actuator, jisse endpoint milta hai:
+
+http://localhost:8080/actuator/prometheus
+
+Ye endpoint text format me data deta hai jaise:
+
+http_requests_total{method="GET",status="200"} 120
+http_requests_total{method="POST",status="500"} 3
+
+2. Prometheus Scrapes Data
+
+Prometheus periodically (e.g., every 15 seconds) tumhare endpoints se metrics scrape karta hai (yaani fetch karta hai).
+
+Soch lo — har 15 second me Prometheus tumhare apps se data lekar apne database me store karta hai.
+
+3. Storage
+
+Prometheus apna Time-Series Database (TSDB) use karta hai —
+jisme har metric ke saath timestamp hota hai.
+
+Example:
+cpu_usage{instance="server1"} 75 @ 10:00:00
+cpu_usage{instance="server1"} 80 @ 10:00:15
+
+4. Querying (PromQL)
+
+Prometheus ke paas apni ek query language hoti hai — PromQL (Prometheus Query Language)
+Isse tum real-time graphs aur alerts bana sakte ho.
+
+Example query:
+rate(http_requests_total[5m])
+👉 ye pichle 5 minute me requests ka rate calculate karega.
+
+5. Visualization (Grafana Integration)
+
+Prometheus ko usually Grafana ke saath integrate kiya jata hai,
+jahan tum visually dashboards bana sakte ho:
+
+* CPU load graph
+
+* API latency chart
+
+* Error percentage pie chart
+
+🚨 Alerts System (Alertmanager)
+
+Prometheus me Alertmanager hota hai —
+jo tumhare defined conditions pe alert bhej sakta hai (email, Slack, PagerDuty etc.)
+
+Example:
+
+ALERT HighCPUUsage
+  IF avg(rate(cpu_usage[5m])) > 80
+  FOR 2m
+  LABELS { severity = "critical" }
+  ANNOTATIONS {
+    summary = "CPU usage above 80%"
+  }
+
+Agar CPU usage 2 minute tak 80% se zyada rahe, to alert trigger hoga ⚠️
+
+🔍 Real-World Example
+
+Socho tumhare paas ek E-commerce microservices system hai:
+
+* product-service
+
+* order-service
+
+* payment-service
+
+Har service apni /metrics endpoint expose karti hai.
+Prometheus un sabko scrape karta hai aur data store karta hai.
+Grafana dashboard pe tum dekh sakte ho:
+
+* kitni requests aayi
+
+* average latency kitni thi
+
+* kis service me zyada errors aaye
+
+Agar payment-service me error rate 10% se zyada ho gaya → Prometheus alert bhej deta hai Slack pe.
+
+🧠 Summary
+| Concept          | Meaning                                                 |
+| ---------------- | ------------------------------------------------------- |
+| **Prometheus**   | Metrics collect & store karne wala monitoring system    |
+| **Micrometer**   | App-level metrics library (Spring Boot me use hoti hai) |
+| **Scraping**     | Prometheus app endpoints se metrics fetch karta hai     |
+| **PromQL**       | Query language for metrics                              |
+| **Grafana**      | Dashboard visualization                                 |
+| **Alertmanager** | Alerts bhejne ke liye system                            |
+
+

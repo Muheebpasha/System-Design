@@ -1,0 +1,114 @@
+SELECT CONCAT(
+    'https://api.aladhan.com/v1/calendar/2025/06?latitude=',
+    prayer_times_cities.latitude,
+    '&longitude=',
+    prayer_times_cities.longitude,
+    '&method=4'
+) AS url,
+    prayer_times.city_id, 
+    MIN(prayer_times.fajr) AS fajr, 
+    prayer_times_cities.city_name, 
+    prayer_times_cities.state_name,
+    prayer_times_cities.latitude, 
+    prayer_times_cities.longitude
+    
+FROM 
+    prayer_times
+JOIN 
+    prayer_times_cities ON prayer_times.city_id = prayer_times_cities.id
+GROUP BY 
+    prayer_times.city_id,
+    prayer_times_cities.city_name, 
+    prayer_times_cities.state_name,
+    prayer_times_cities.latitude, 
+    prayer_times_cities.longitude
+ORDER BY 
+    fajr ASC;
+    
+ =============================================================================
+ SELECT MIN(fajr) AS min_fajr, MAX(fajr) AS max_fajr, MIN(dhuhr) AS min_dhuhr, MAX(dhuhr) AS max_dhuhr, MIN(asr) AS min_asr, MAX(asr) AS max_asr, MIN(maghrib) AS min_maghrib, MAX(maghrib) AS max_maghrib, MIN(isha) AS min_isha, MAX(isha) AS max_isha FROM prayer_times; 
+ 
+ since we used datatype as time so able to calculate the max() and min
+ ================================================================================
+
+SELECT 
+  tp.id,
+  tp.program_name,
+  tp.channel_id,
+  tp.program_image AS old_image,
+  tsd.program_image AS new_image,
+  tp.program_type AS old_type,
+  tsd.program_type AS new_type
+FROM tv_programs tp
+JOIN tv_channels_schedule_details tsd
+  ON tp.channel_id = tsd.channel_id
+ AND tp.program_name = tsd.program_name;
+
+UPDATE tv_programs tp
+JOIN tv_channels_schedule_details tsd
+  ON tp.channel_id = tsd.channel_id
+ AND tp.program_name = tsd.program_name
+SET 
+  tp.program_image = tsd.program_image,
+  tp.program_type = tsd.program_type;
+  
+
+INSERT INTO tv_programs (channel_id, program_name)
+SELECT DISTINCT channel_id, program_name
+FROM tv_channels_schedule_details;
+
+
+SELECT * FROM tv_channels_schedule_details WHERE TIMESTAMPDIFF(MINUTE, program_start_time,program_end_time) BETWEEN 0 AND 30; 
+
+
+-- 🔄 Update Movie Programs (Duration between 2 and 4 hours)
+SELECT *
+FROM tv_channels_schedule_details
+WHERE TIMESTAMPDIFF(MINUTE, program_start_time, program_end_time) BETWEEN 120 AND 240;
+
+UPDATE tv_channels_schedule_details
+SET program_type = 3,
+    program_image = 'tv-movie-poster.jpg'
+WHERE TIMESTAMPDIFF(MINUTE, program_start_time, program_end_time) BETWEEN 120 AND 240;
+
+-- 🏏 Update Sports Programs (Cricket-related)
+SELECT *
+FROM tv_channels_schedule_details
+WHERE program_name REGEXP 'cricket|sport';
+
+UPDATE tv_channels_schedule_details
+SET program_type = 6,
+    program_image = 'tv-sports.jpg'
+WHERE program_name REGEXP 'cricket|sport';
+
+-- 🛍️ Update Teleshopping Programs
+SELECT *
+FROM tv_channels_schedule_details
+WHERE program_name IN ('Tele Shopping', 'Teleshopping');
+
+UPDATE tv_channels_schedule_details
+SET program_type = 5,
+    program_image = 'teleshoping.jpg'
+WHERE program_name IN ('Tele Shopping', 'Teleshopping');
+
+-- 🎵 Update Music Programs (based on name patterns)
+SELECT *
+FROM tv_channels_schedule_details
+WHERE program_name REGEXP 'Music|Musical|Songs|Song';
+
+UPDATE tv_channels_schedule_details
+SET program_type = 4,
+    program_image = 'tv-music.jpg'
+WHERE program_name REGEXP 'Music|Musical|Songs|Song';
+
+-- 📰 Update News Programs (regional and national names)
+SELECT *
+FROM tv_channels_schedule_details
+WHERE program_name REGEXP 'Seithigal|Seythigal|Samachar|Varthakal';
+
+UPDATE tv_channels_schedule_details
+SET program_type = 7,
+    program_image = 'tv-news.jpg'
+WHERE program_name REGEXP 'Seithigal|Seythigal|Samachar|Varthakal';
+
+

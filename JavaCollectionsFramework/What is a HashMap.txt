@@ -1,0 +1,192 @@
+🧠 What is a HashMap?
+
+HashMap is part of the Java Collections Framework and stores data in key-value pairs.
+
+* Keys must be unique
+
+* Values can be duplicate
+
+* It’s unordered and non-synchronized
+
+✅ 1. Basic Example – Create & Add Elements
+--------------------------------------------
+import java.util.HashMap;
+
+public class HashMapExample1 {
+    public static void main(String[] args) {
+        // Create a HashMap
+        HashMap<Integer, String> map = new HashMap<>();
+
+        // Add key-value pairs
+        map.put(1, "Apple");
+        map.put(2, "Banana");
+        map.put(3, "Cherry");
+        map.put(4, "Banana"); // Duplicate value allowed
+
+        // Print map
+        System.out.println("HashMap: " + map);
+    }
+}
+Output:
+HashMap: {1=Apple, 2=Banana, 3=Cherry, 4=Banana}
+
+===============================================================
+🔍 2. Accessing Elements
+public class HashMapExample2 {
+    public static void main(String[] args) {
+        HashMap<Integer, String> map = new HashMap<>();
+        map.put(101, "Alice");
+        map.put(102, "Bob");
+        map.put(103, "Charlie");
+
+        // Get a value by key
+        System.out.println("Name for key 102: " + map.get(102));
+
+        // Check if key or value exists
+        System.out.println("Contains key 103? " + map.containsKey(103));
+        System.out.println("Contains value 'Alice'? " + map.containsValue("Alice"));
+    }
+}
+=========================================================================
+🔁 3. Iterating Over a HashMap
+
+import java.util.HashMap;
+import java.util.Map;
+
+public class HashMapExample3 {
+    public static void main(String[] args) {
+        HashMap<String, Integer> marks = new HashMap<>();
+        marks.put("Math", 95);
+        marks.put("English", 88);
+        marks.put("Science", 92);
+
+        // 1️⃣ Iterate using for-each on entrySet()
+        for (Map.Entry<String, Integer> entry : marks.entrySet()) {
+            System.out.println(entry.getKey() + " → " + entry.getValue());
+        }
+
+        // 2️⃣ Iterate only keys
+        for (String subject : marks.keySet()) {
+            System.out.println("Subject: " + subject);
+        }
+
+        // 3️⃣ Iterate only values
+        for (Integer score : marks.values()) {
+            System.out.println("Score: " + score);
+        }
+    }
+}
+==========================================================================
+✏️ 4. Update or Remove Elements
+public class HashMapExample4 {
+    public static void main(String[] args) {
+        HashMap<Integer, String> students = new HashMap<>();
+        students.put(1, "John");
+        students.put(2, "Mary");
+        students.put(3, "David");
+
+        // Update value for key 2
+        students.put(2, "Sophia");
+
+        // Remove entry for key 3
+        students.remove(3);
+
+        System.out.println(students);
+    }
+}
+Output:
+{1=John, 2=Sophia}
+====================================================================
+🧩 5. Compute and Merge Methods (Java 8+)
+import java.util.HashMap;
+
+public class HashMapExample5 {
+    public static void main(String[] args) {
+        HashMap<String, Integer> items = new HashMap<>();
+        items.put("Pen", 10);
+        items.put("Pencil", 5);
+
+        // computeIfPresent: modify existing key
+        items.computeIfPresent("Pen", (k, v) -> v + 5);
+
+        // computeIfAbsent: add new key if missing
+        items.computeIfAbsent("Eraser", k -> 3);
+
+        // merge: combine old and new values
+        items.merge("Pencil", 2, Integer::sum);
+
+        System.out.println(items);
+    }
+}
+Output :
+{Pen=15, Pencil=7, Eraser=3}
+======================================================
+🧮 6. Counting Word Frequency Example
+
+import java.util.HashMap;
+
+public class WordCountExample {
+    public static void main(String[] args) {
+        String text = "apple banana apple mango banana apple";
+        String[] words = text.split(" ");
+
+        HashMap<String, Integer> wordCount = new HashMap<>();
+
+        for (String word : words) {
+            // Increment count if present, else start with 1
+            wordCount.put(word, wordCount.getOrDefault(word, 0) + 1);
+        }
+
+        System.out.println("Word Frequency: " + wordCount);
+    }
+}
+
+Output:
+
+Word Frequency: {banana=2, apple=3, mango=1}
+======================================================================
+⚡ 7. Using HashMap with Custom Objects (Key or Value)
+
+import java.util.HashMap;
+import java.util.Objects;
+
+class Employee {
+    int id;
+    String name;
+
+    Employee(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    // Override equals and hashCode for correct key comparison
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Employee)) return false;
+        Employee e = (Employee) o;
+        return id == e.id && Objects.equals(name, e.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name);
+    }
+}
+
+public class CustomObjectHashMap {
+    public static void main(String[] args) {
+        HashMap<Employee, String> map = new HashMap<>();
+
+        map.put(new Employee(1, "Alice"), "HR");
+        map.put(new Employee(2, "Bob"), "IT");
+        map.put(new Employee(3, "Charlie"), "Finance");
+
+        for (Employee emp : map.keySet()) {
+            System.out.println(emp.name + " → " + map.get(emp));
+        }
+    }
+}
+
+
+

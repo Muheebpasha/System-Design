@@ -1,0 +1,233 @@
+Resilience4j ek lightweight fault tolerance library hai 
+— mainly microservices aur distributed systems ke liye use hoti hai 
+— taaki hamara system resilient (majboot) bane, even if kuch external service ya dependency fail ho jaye.
+
+==========
+Techniques
+==========
+1. Retries
+2. Rate Limiting
+3. Bulkheads
+4. Circuit Breaker
+5. Fallbacks
+6. Timeouts
+7. Graceful Degradation
+--------------------------------------------------------------------------------------------------------
+💪 Analogy (Real-Life Example)
+
+Soch lo tumhara ek restaurant hai (ye tumhara microservice hai 🍔).
+
+Aur tum daily vegetable supplier (ye tumhara external API hai) se order karte ho.
+
+Ab agar:
+
+* Supplier late kar raha hai, ya
+
+* Network busy hai, ya
+
+* Supplier down ho gaya hai
+
+to agar tum directly usko call karte raho, tumhara restaurant slow ho jaayega ya band ho jaayega.
+
+👉 Resilience4j yahaan ek manager ki tarah act karta hai:
+
+* Agar supplier response nahi de raha → Timeout ya Retry karega
+
+* Agar supplier repeatedly fail kar raha → Circuit Breaker use karega (kuch time ke liye usko call hi nahi karega)
+
+* Agar load zyada hai → Rate Limiter ya Bulkhead lagayega
+
+* Agar sab kuch fail ho gaya → ek Fallback option se default vegetables le aayega 😄
+-----------------------------------------------------------------------------------------------------------------------------
+🧩 Resilience4j ke Major Modules
+---------------------------------
+1. Circuit Breaker ⚡
+
+* Jab koi service baar-baar fail ho, to usko temporarily block kar deta hai.
+
+* Jaise ek electric circuit breaker hota hai – overload hone pe switch off kar deta hai taaki pura system na jale.
+
+🔹 Example:
+@CircuitBreaker(name = "movieService", fallbackMethod = "fallbackMovies")
+public List<Movie> getMovies() {
+    return restTemplate.getForObject("http://movie-service/movies", List.class);
+}
+
+public List<Movie> fallbackMovies(Exception e) {
+    return List.of(new Movie("Default Movie", "Service unavailable right now"));
+}
+
+🧠 Analogy: Agar Netflix server down hai, tumhara app ek default message dikha dega instead of crash.
+-------------------------------------------------------------------------------------------------------
+2. Retry 🔁
+
+* Agar ek request fail ho gayi to automatic retry karta hai limited attempts tak.
+
+* Useful jab temporary network glitch ho.
+
+🔹 Example:
+
+@Retry(name = "paymentService", fallbackMethod = "fallbackPayment")
+public String makePayment() {
+    return restTemplate.getForObject("http://payment-service/pay", String.class);
+}
+
+public String fallbackPayment(Exception e) {
+    return "Payment service unavailable, please try again later.";
+}
+
+🧠 Analogy: Agar card swipe first time fail ho gaya, tum dobara try karte ho — wahi Retry logic hai.
+-----------------------------------------------------------------------------------------------------
+3. Rate Limiter 🚦
+
+* Ek second me ya minute me limited requests hi jaane deta hai.
+
+* Taaki system overload na ho.
+
+🔹 Example:
+
+@RateLimiter(name = "userService")
+public String getUserDetails() {
+    return restTemplate.getForObject("http://user-service/details", String.class);
+}
+
+🧠 Analogy: Jaise toll gate pe limited gaadi ek time me ja sakti hai.
+--------------------------------------------------------------------------------------------------------
+
+4. Bulkhead 🛳️
+
+* Ek service ke liye limited thread/resources assign karta hai taaki wo pura system block na kare.
+
+🔹 Example:
+
+@Bulkhead(name = "orderService", type = Bulkhead.Type.THREADPOOL)
+public String placeOrder() {
+    return restTemplate.getForObject("http://order-service/place", String.class);
+}
+
+🧠 Analogy: Ship me compartments (bulkheads) hote hain — ek compartment flood ho gaya to poori ship nahi dubti.
+
+--------------------------------------------------------------------------------------------------------------
+5. TimeLimiter ⏱️
+
+* Define karta hai ki ek external call maximum kitne time me complete hona chahiye.
+
+* Agar zyada delay hua to timeout kar deta hai.
+
+🔹 Example:
+@TimeLimiter(name = "inventoryService")
+public CompletableFuture<String> getInventory() {
+    return CompletableFuture.supplyAsync(() -> restTemplate.getForObject("http://inventory-service/stock", String.class));
+}
+--------------------------------------------------------------------------------------------------------------
+⚙️ Typical Use Case Scenarios
+------------------------------------------------------------------------------------------------------------------------------
+| Use Case                           | Resilience4j Feature         | Explanation                                             |
+| ---------------------------------- | ---------------------------- | ------------------------------------------------------- |
+| API call to slow 3rd-party service | CircuitBreaker + TimeLimiter | Prevents blocking the app when dependency is down       |
+| Flaky payment gateway              | Retry + Fallback             | Automatically reattempts payment and shows safe message |
+| Overloaded API gateway             | RateLimiter                  | Controls incoming request flow                          |
+| Shared database or microservice    | Bulkhead                     | Prevents one service from exhausting DB connections     |
+| Long-running async calls           | TimeLimiter                  | Ensures thread doesn’t hang forever                     |
+-------------------------------------------------------------------------------------------------------------------------------
+
+💡 Summary
+-------------------------------------------------------------------------------
+| Feature         | Purpose                      | Real Life Analogy          |
+| --------------- | ---------------------------- | -------------------------- |
+| Circuit Breaker | Stop calling failing service | Switch off during overload |
+| Retry           | Try again after failure      | Swipe card again           |
+| Rate Limiter    | Limit traffic                | Toll gate                  |
+| Bulkhead        | Isolate resources            | Ship compartments          |
+| TimeLimiter     | Set timeout                  | Wait limit for a reply     |
+-------------------------------------------------------------------------------
+
+🔧 Integration with Spring Boot
+
+Add dependency:
+
+<dependency>
+    <groupId>io.github.resilience4j</groupId>
+    <artifactId>resilience4j-spring-boot3</artifactId>
+    <version>2.1.0</version>
+</dependency>
+
+Then use annotations like:
+
+@CircuitBreaker(name="backendA", fallbackMethod="fallbackA")
+@Retry(name="backendA")
+@RateLimiter(name="backendA")
+
+Aise Resilience4j tumhare microservices ko battle-ready bana deta hai — chahe network fail ho, downstream API slow ho, ya load zyada ho.
+System gracefully degrade hota hai instead of breaking down 💥
+
+----------------------------------------------------------------------------------------------------------------
+Fallbacks are actually the heart of resilience strategies — especially jab hum Resilience4j use karte hain.
+💡 What is a Fallback?
+
+Fallback ka matlab hota hai —
+
+“A backup plan jab main system fail ho jaye.”
+
+Resilience4j me fallback ek method hota hai jo tab execute hota hai jab:
+
+* External service call fail ho jaye
+
+* Circuit breaker open ho jaye
+
+* Retry sab attempt fail kar de
+
+* Ya timeout ho jaye
+
+Yaani — jab bhi “normal response” nahi milta, fallback method ek safe alternative ya default response return karta hai.
+
+🧠 Real-Life Analogy
+
+Soch lo tum Zomato app pe ho 🍔
+
+Tum order kar rahe ho ek restaurant se.
+Achanak wo restaurant offline ho gaya (API down).
+
+Ab agar fallback na ho, app crash ho jaayegi ya “Server Error” dikhayegi ❌
+Par agar fallback configured hai —
+to app bolegi 👉
+
+“Restaurant currently unavailable. Try these similar restaurants nearby.”
+
+Yaani user experience gracefully degrade hota hai, app band nahi hoti.
+That’s the power of a fallback 🙌
+
+----------------------------------------------------------------------------------------------------------------------
+⚙️ Fallback in Resilience4j
+Example with CircuitBreaker + Fallback
+@CircuitBreaker(name = "movieService", fallbackMethod = "fallbackMovies")
+public List<Movie> getMovies() {
+    return restTemplate.getForObject("http://movie-service/movies", List.class);
+}
+
+// fallback method
+public List<Movie> fallbackMovies(Exception e) {
+    return List.of(new Movie("Default Movie", "Service unavailable right now"));
+}
+
+🧾 Explanation:
+
+* Agar movie-service down hai ya fail ho gaya,
+
+* To instead of throwing error,
+
+* fallbackMovies() call hota hai,
+
+* Jo ek safe, predefined response deta hai.
+
+Example with Retry + Fallback
+@Retry(name = "paymentService", fallbackMethod = "fallbackPayment")
+public String makePayment() {
+    return restTemplate.getForObject("http://payment-service/pay", String.class);
+}
+
+public String fallbackPayment(Exception e) {
+    return "Payment service unavailable, please try again later.";
+}
+
+

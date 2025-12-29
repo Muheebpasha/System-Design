@@ -1,0 +1,30 @@
+Challenges Solved By API Gateway
+
+1. Communication Issue [Remember every service URLs]
+2. Security + Authentication
+
+Introduction to API Gateway
+
+Advantages :
+1. It encapsulates the internal system architecture
+2. Handle cross-cutting concerns like security, load balancing, rate limiting, and analytics
+3. Can authenticate incoming requests and pass only valid requests to the services.
+4. Can aggregate responses from different microservices.
+5. Plats a crucial role in simplifying client interactions and managing cross-cutting concerns.
+
+Functions [Capabilities of API Gateway] :
+1. Request Routing
+2. Load Balancing
+3. Authentication and Authorization
+4. Rate Limiting
+5. Request and Response Transformation
+6. Aggregation of Data from Multiple Services.
+
+Spring Cloud Gateway:
+
+
+
+
+
+
+

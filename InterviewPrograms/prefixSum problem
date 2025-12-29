@@ -1,0 +1,79 @@
+“Given an integer array arr[] (which may include positive, negative and zero values) and an integer k, find the length of the longest contiguous subarray whose sum equals k. If no such subarray exists, return 0.”
+examples
+
+arr = [10, 5, 2, 7, 1, -10], k = 15 // length is 6 as Subarrays summing to 15 include [5, 2, 7, 1] (length 4), [10, 5] (length 2), and [10, 5, 2, 7, 1, -10] (length 6) → the longest is length 6.
+arr = [-5, 8, -14, 2, 4, 12], k = -5 /One subarray [-5, 8, -14, 2, 4] sums to -5, of length 5.
+arr = [1, -1, 5, -2, 3], k = 3. The subarray [1, -1, 5, -2] sums to 3 and is of length 4
+
+O(n)
+
+public static int longestSubarrayWithSumK(int[] arr, int k) {
+    Map<Integer, Integer> map = new HashMap<>(); // prefixSum -> index
+    int prefixSum = 0;
+    int maxLen = 0;
+
+    for (int i = 0; i < arr.length; i++) {
+        prefixSum += arr[i];
+
+        // Case 1: subarray from 0 to i has sum k
+        if (prefixSum == k) {
+            maxLen = i + 1;
+        }
+
+        // Case 2: find prefixSum - k in the map
+        if (map.containsKey(prefixSum - k)) {
+            int length = i - map.get(prefixSum - k);
+            maxLen = Math.max(maxLen, length);
+        }
+
+        // Store prefixSum only if not present (first occurrence gives longest subarray)
+        map.putIfAbsent(prefixSum, i);
+    }
+
+    return maxLen;
+}
+
+
+
+You are given a List<String> and must find:
+The longest string in the list
+The shortest string in the list
+["apple", "hi", "watermelon", "cat"] output ("watermelon", "hi")
+["abcd", "xyza", "hi", "cat"] output ("abcd", "hi") as that appears first
+
+import java.util.*;
+
+public class Main {
+    public static void main(String[] args) {
+        List<String> list = List.of("abcd", "xyza", "hi", "cat");
+
+        String longest = list.stream()
+                .reduce((a, b) -> a.length() >= b.length() ? a : b)
+                .orElse(null);
+
+        String shortest = list.stream()
+                .reduce((a, b) -> a.length() <= b.length() ? a : b)
+                .orElse(null);
+
+        String[] result = new String[]{longest, shortest};
+        System.out.println(Arrays.toString(result));
+    }
+}
+===================================================================================================
+
+common longest prefix String[] strs = {"flower", "flow", "flight"}; -- output should be -> fl
+
+public static String longestCommonPrefix(String[] strs) {
+	if(str == null) || str.length ==0) return "";
+	
+	return Arrays.stream(strs)
+		.reduce((a,b)-> {
+			int i=0;
+		
+			while(i<a.lenght() && i< b.length() && && a.charAt(i) == b.charAt(i)) {
+				i++;
+			}
+			return a.substring(0,i);
+		})
+		.orElse("");
+}

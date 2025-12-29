@@ -1,0 +1,122 @@
+@ControllerAdvice ek global interceptor hai jo saare controllers ke liye common logic handle karta hai.
+Matlab:
+
+* Har controller me same code likhne ki zarurat nahi
+
+* Ek jagah likho → sab controllers pe apply ho jaata hai
+
+🧠 Real-World Analogy
+🏢 Office Example
+
+Controllers → Employees
+
+@ControllerAdvice → HR / Security Desk
+
+Agar:
+
+Employee galti kare → HR handle kare
+
+Employee late aaye → HR handle kare
+
+➡️ Employees ko baar-baar HR ka kaam nahi karna padta.
+
+Same way:
+
+Controllers sirf business logic
+
+@ControllerAdvice handles cross-cutting concerns
+==================================================================================
+🎯 Why do we need @ControllerAdvice?
+❌ Without @ControllerAdvice
+
+@RestController
+public class UserController {
+
+    @GetMapping("/users/{id}")
+    public User getUser(@PathVariable int id) {
+        try {
+            // logic
+        } catch (Exception e) {
+            // exception handling
+        }
+    }
+}
+Problems:
+
+* Duplicate code
+
+* Hard to maintain
+
+* Not clean
+
+✅ With @ControllerAdvice
+@RestController
+public class UserController {
+
+    @GetMapping("/users/{id}")
+    public User getUser(@PathVariable int id) {
+        // only business logic
+    }
+}
+
+@ControllerAdvice
+public class GlobalExceptionHandler {
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<Object> handleAllExceptions(Exception ex) {
+        return new ResponseEntity<>("Error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+}
+✔️ Clean
+✔️ Centralized
+✔️ Reusable
+
+🔁 What Problems Does @ControllerAdvice Solve?
+1️⃣ Global Exception Handling
+
+@ExceptionHandler(UserNotFoundException.class)
+
+2️⃣ Validation Errors
+
+@ExceptionHandler(MethodArgumentNotValidException.class)
+
+3️⃣ Global Response Modifications
+
+* Common error structure
+
+* Logging
+
+* Security checks
+
+⚙️ How @ControllerAdvice Works Internally
+
+1. Request → Controller
+
+2. Exception thrown ❌
+
+3. Spring checks:
+
+ * Is there any @ControllerAdvice?
+
+4. If yes:
+
+ * Matching @ExceptionHandler method is called
+
+5. Response returned to client
+=====================================
+
+🧩 @ControllerAdvice vs @ExceptionHandler
+
+| Annotation          | Scope                    |
+| ------------------- | ------------------------ |
+| `@ExceptionHandler` | One controller           |
+| `@ControllerAdvice` | All controllers (global) |
+=====================================================
+
+
+
+
+What is @ControllerAdvice?
+
+@ControllerAdvice is a Spring annotation used to handle cross-cutting concerns for multiple controllers in one central place.
+

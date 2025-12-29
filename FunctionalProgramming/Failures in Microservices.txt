@@ -1,0 +1,5 @@
+Failures in Microservices
+1. Network Failures
+2. Service Unavailability
+3. High Latency Issues (Slow Response)
+4. 

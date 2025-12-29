@@ -1,0 +1,42 @@
+In software / web application context, stateless has a very specific meaning:
+
+📝 Definition
+
+A stateless system does not store any information about the client’s previous requests.
+
+Every request from the client to the server must contain all the information the server needs to understand and process it.
+
+The server treats each request as independent.
+
+⚡ Example
+Stateless
+
+You call a REST API GET /orders/123 with an Authorization token in the header.
+
+The server checks the token, fetches order 123, and sends the response.
+
+The server does not remember that you made this request afterward.
+
+Stateful
+
+You log in to a server, it creates a session and stores it in memory.
+
+When you make the next request, the server looks at that session to know who you are.
+
+The server remembers you until the session ends.
+
+🔑 Why Stateless is Important in Spring Boot / REST APIs
+
+Scalability → Any server in a cluster can handle the request because no session state is stored locally.
+
+Simplicity → No need for session storage management.
+
+Resilience → If one server goes down, another can serve the client (since no client state was tied to the first server).
+
+👉 In Spring Security, when we say stateless authentication, it usually means:
+
+No HTTP session is created.
+
+Every request must include authentication info (e.g., JWT in the Authorization header).
+
+

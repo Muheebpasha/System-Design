@@ -1,0 +1,39 @@
+Set up SSH key-based authentication. This is a secure and recommended method :
+----------------------------------------------------------------------------
+✅ Step-by-step Guide (Run these commands on your local machine):
+1. Check if you already have SSH keys
+ls ~/.ssh/id_rsa.pub
+
+*If it exists, skip to step 3.
+*If not, generate one:
+
+====================================================================================================
+2. Generate a new SSH key
+ssh-keygen -t rsa -b 4096 -C "muheeb.pasha@oneindia.co.in"
+
+*Press Enter to accept the default file location (~/.ssh/id_rsa)
+*When prompted for a passphrase, press Enter twice (leave it empty if you want passwordless login).
+
+======================================================================================================
+
+3. Copy your public key to the remote server
+ssh-copy-id filmibeat@www1.filmibeat.com
+
+*It will ask for your password one last time.
+*This command appends your public key (~/.ssh/id_rsa.pub) to the ~/.ssh/authorized_keys file on the server.
+
+========================================================================================================
+4. Test the passwordless SSH
+ssh filmibeat@www1.filmibeat.com
+
+=========================================================================================================
+🛠️ If ssh-copy-id is not available
+You can do it manually:
+
+cat ~/.ssh/id_rsa.pub | ssh filmibeat@www1.filmibeat.com "mkdir -p ~/.ssh && cat >> ~/.ssh/authorized_keys && chmod 600 ~/.ssh/authorized_keys"
+
+
+
+
+
+
