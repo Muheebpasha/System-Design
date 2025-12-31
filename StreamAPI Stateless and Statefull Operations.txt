@@ -1,0 +1,293 @@
+1️⃣ Stateless Operations (Sabse Important & Recommended)
+==============================================================
+👉 Stateless operation ka matlab:
+
+Stream ka har element independently process hota hai, kisi aur element ki memory ya state nahi rakhta.
+
+➡️ Ek element ka result dusre element par depend nahi karta.
+
+🧠 Real-Life Example
+
+Socho tum office attendance system bana rahe ho:
+
+* Har employee ka salary check karna
+
+* Har product par GST add karna
+
+* Har student ke marks ko percentage me convert karna
+
+👉 Ek employee ka salary dusre employee se related nahi.
+
+✅ Java Code Example (Stateless)
+
+List<Integer> prices = List.of(100, 200, 300, 400);
+
+prices.stream()
+      .map(price -> price + 18)   // GST add
+      .forEach(System.out::println);
+🧠 Explanation:
+
+ * map() har element pe independently kaam kar raha hai
+
+* Koi shared variable nahi
+
+* Thread-safe
+
+* Parallel stream ke liye perfect
+
+🔥 Common Stateless Operations
+------------------------------------------------
+| Operation   | Reason                         |
+| ----------- | ------------------------------ |
+| `map()`     | No memory of previous elements |
+| `filter()`  | Sirf condition check           |
+| `flatMap()` | Independent transformation     |
+| `peek()`    | Read-only                      |
+------------------------------------------------
+======================================================================================
+
+🔹 2️⃣ Stateful Operations (Danger Zone ⚠️)
+👉 Stateful operation ka matlab:
+
+Stream processing ke dauran previous elements ka data ya state yaad rakhta hai.
+
+➡️ Current element ka behavior pehle wale element pe depend karta hai.
+
+🧠 Real-Life Example
+
+Socho tum bank transaction processing kar rahe ho:
+
+* Agar total balance 1 lakh cross ho gaya → alert bhejo
+
+* Duplicate employee IDs ignore karo
+
+* Pehle 10 unique users ko hi allow karo
+
+👉 Yahan memory maintain karni padti hai.
+
+❌ Bad Java Example (Stateful)
+
+List<Integer> list = List.of(1, 2, 3, 4, 5);
+List<Integer> result = new ArrayList<>();
+
+list.stream()
+    .filter(n -> {
+        result.add(n);     // ❌ shared mutable state
+        return n % 2 == 0;
+    })
+    .forEach(System.out::println);
+    
+🚨 Problem:
+
+* result external mutable state hai
+
+* Parallel stream me data corruption
+
+* Debug karna mushkil
+
+⚠️ Very Dangerous Example (Parallel Stream)
+List<Integer> result = new ArrayList<>();
+
+IntStream.range(1, 1000)
+         .parallel()
+         .forEach(result::add);   // ❌ Thread unsafe
+
+➡️ Output unpredictable
+➡️ Production bug 💥
+
+🔹 3️⃣ Legit Stateful Operations (Stream ke andar safe)
+
+Java kuch controlled stateful operations allow karta hai:
+
+✔️ distinct()
+
+List<Integer> nums = List.of(1, 2, 2, 3, 3, 4);
+
+nums.stream()
+    .distinct()
+    .forEach(System.out::println);
+
+🧠 Internally:
+
+ * Java set maintain karta hai
+
+ * Thread-safe implementation
+
+* Tumhara code clean rehta hai
+
+✔️ limit() & skip()
+
+IntStream.range(1, 100)
+         .limit(5)
+         .forEach(System.out::println);
+
+➡️ Count maintain karta hai (stateful)
+➡️ But stream engine handle karta hai, not you
+
+🔹 4️⃣ Stateless vs Stateful (Interview Table)
+-------------------------------------------------------------------
+| Feature           | Stateless         | Stateful                |
+| ----------------- | ----------------- | ----------------------- |
+| Memory            | ❌ No memory      | ✅ Maintains state      |
+| Thread-safe       | ✅ Yes            | ❌ Risky                |
+| Parallel friendly | ✅ Best           | ❌ Avoid                |
+| Example           | `map`, `filter`   | `distinct`, custom list |
+-------------------------------------------------------------------
+
+🔹 5️⃣ Real Production Rule (Golden Rule ⭐)
+
+Stream ke andar kabhi bhi external variable modify mat karo
+
+❌ Wrong:
+sum += n;
+
+✅ Right:
+int sum = list.stream().mapToInt(Integer::intValue).sum();
+
+🔹 6️⃣ When to Use What?
+✅ Use Stateless when:
+
+ * Data transformation
+
+ * Filtering
+
+ * Mapping DB results
+
+ * REST response building (Spring Boot)
+
+❌ Avoid Stateful when:
+
+ * Using parallel streams
+
+ * Shared variables
+
+ * Complex logic
+ 
+ 🔹 Final One-Line Summary (Yaad Rakhna)
+
+Stateless = Safe, Fast, Parallel
+Stateful = Risky, Slow, Debug Nightmare
+
+
+🔹 STATEFUL Intermediate Operations
+
+Jo stream ko process karne ke liye elements ka state yaad rakhte hain
+
+✔️ Correct
+
+* distinct() ✅
+
+* sorted() ✅
+
+* limit() ✅
+
+* skip() ✅
+
+👉 Ye internally state maintain karte hain, but safe hain kyunki Java handle karta hai.
+
+🔹 STATELESS Intermediate Operations
+
+Jo har element ko independently process karte hain
+
+✔️ Correct
+
+* map() ✅
+
+* filter() ✅
+
+* flatMap() ✅
+
+🔹 1️⃣ Stateless Intermediate Operations
+-------------------
+| Operation       |
+| --------------- |
+| `map()`         |
+| `filter()`      |
+| `flatMap()`     |
+| `peek()`        |
+| `mapToInt()`    |
+| `mapToLong()`   |
+| `mapToDouble()` |
+-------------------
+
+🔹 2️⃣ Stateful Intermediate Operations
+-----------------
+| Operation     |
+| ------------- |
+| `distinct()`  |
+| `sorted()`    |
+| `limit()`     |
+| `skip()`      |
+| `takeWhile()` |
+| `dropWhile()` |
+-----------------
+
+🔹 3️⃣ Stateless Terminal Operations
+
+These don’t keep state across elements, they just consume stream
+------------------------------
+| Operation                  |
+| -------------------------- |
+| `forEach()`                |
+| `forEachOrdered()`         |
+| `reduce()` *(pure reduce)* |
+| `count()`                  |
+| `findFirst()`              |
+| `findAny()`                |
+| `allMatch()`               |
+| `anyMatch()`               |
+| `noneMatch()`              |
+| `sum()`                    |
+| `min()`                    |
+| `max()`                    |
+------------------------------
+
+🔹 4️⃣ Stateful Terminal Operations (Internal State)
+----------------------
+| Operation          |
+| ------------------ |
+| `collect()`        |
+| `toList()`         |
+| `groupingBy()`     |
+| `partitioningBy()` |
+| `joining()`        |
+----------------------
+
+🔥 Real Interview Explanation (One-Liner)
+
+“Stateless operations process each element independently.
+Stateful operations need to remember previously seen elements or stream order.
+Terminal operations end the stream and produce a result.”
+
+⚠️ MOST IMPORTANT PRODUCTION RULE
+
+❌ User-defined stateful lambda (dangerous):
+
+int sum = 0;
+list.stream().forEach(n -> sum += n); // ❌
+
+
+✅ Functional way:
+
+int sum = list.stream().mapToInt(Integer::intValue).sum();
+
+🧠 Final Cheat Sheet (Screenshot-worthy)
+-------------
+INTERMEDIATE
+-------------
+✔ Stateless → map, filter, flatMap
+✔ Stateful  → distinct, sorted, limit, skip
+
+--------
+TERMINAL
+--------
+✔ Stateless → forEach, allMatch, anyMatch
+✔ Stateful  → collect, groupingBy
+
+💬 If interviewer asks:
+
+“Can stateful operations be used?”
+
+👉 Best answer:
+
+“Yes, but only built-in ones.
