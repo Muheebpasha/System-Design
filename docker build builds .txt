@@ -1,0 +1,69 @@
+docker build . builds a Docker image from a Dockerfile in the current directory.
+
+🔹 What exactly happens when you run:
+
+docker build .
+
+1️⃣ Docker looks for a Dockerfile
+
+* Docker searches for a file named Dockerfile in the current directory (.)
+
+Example:
+.
+├── Dockerfile
+├── src/
+├── package.json
+
+2️⃣ Docker sends the build context
+
+ * . = current directory
+
+ * Docker sends all files in this directory (except those in .dockerignore) to the Docker daemon
+
+👉 This is called the build context
+
+3️⃣ Docker executes instructions step-by-step
+
+Each line in the Dockerfile is executed in order:
+
+Example Dockerfile:
+
+FROM node:18
+WORKDIR /app
+COPY . .
+RUN npm install
+CMD ["npm", "start"]
+
+
+Docker does:
+
+1. Pull node:18 image
+
+2. Create /app
+
+3. Copy files
+
+4. Run npm install
+
+5. Set startup command
+
+Each step creates a layer
+
+4️⃣ Docker creates a Docker image
+
+Final output = an image
+
+Image has no name or tag unless you specify one
+
+You’ll see:
+
+Successfully built a1b2c3d4e5f6
+
+----------------------------------
+| Command        | Accepts       |
+| -------------- | ------------- |
+| `docker run`   | **IMAGE**     |
+| `docker start` | **CONTAINER** |
+| `docker stop`  | **CONTAINER** |
+| `docker rm`    | **CONTAINER** |
+----------------------------------

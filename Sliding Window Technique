@@ -1,0 +1,85 @@
+🔥 Sliding Window Technique 
+==============================
+❓ Sliding Window kya hota hai?
+
+Sliding Window ek optimization technique hai jo array / string problems me use hoti hai jab:
+
+Contiguous subarray / substring ka question ho
+
+Brute force O(n²) ya O(n³) ja raha ho
+
+Tum window ko slide karke kaam kar sakte ho
+
+👉 Window = array ka ek continuous part
+
+🧠 Real-Life Analogy
+
+Socho tum train ke window se bahar dekh rahe ho 🚆
+
+Pehle window ek jagah par hai
+
+Fir train move karti hai → window ka view shift hota hai
+
+Har baar new view milta hai bina pura train ghoomne ke
+
+Bas wahi Sliding Window hai 😄
+
+🪟 Types of Sliding Window (VERY IMPORTANT)
+1️⃣ Fixed Size Sliding Window
+📌 Example:
+
+Size = k
+
+Question: Maximum sum of subarray of size k
+
+
+🧩 Example 1: Maximum Sum Subarray of Size K
+Input
+arr = [2, 1, 5, 1, 3, 2]
+k = 3
+
+❌ Brute Force
+
+* Har subarray ka sum nikaalo
+
+* Time: O(n²) ❌
+
+✅ Sliding Window Approach
+==========================
+
+int maxSum = 0, windowSum = 0;
+int k = 3;
+
+for (int i = 0; i < arr.length; i++) {
+    windowSum += arr[i];
+
+    if (i >= k - 1) {
+        maxSum = Math.max(maxSum, windowSum);
+        windowSum -= arr[i - (k - 1)];
+    }
+}
+
+🧠 Soch
+
+* Pehle window banao
+
+* Phir new element add
+
+* old element remove
+
+* Compare & slide
+
+⏱ Time: O(n)
+📦 Space: O(1)
+
+2️⃣ Variable Size Sliding Window (Most Important ⭐⭐⭐)
+
+Yaha window ka size expand / shrink hota rehta hai
+
+📌 Used when:
+
+* Condition based problems
+
+* Longest / shortest subarray
+
+* Sum / count / distinct

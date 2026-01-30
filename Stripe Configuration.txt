@@ -1,0 +1,60 @@
+Step1 : Add Dependency for Stripe
+<dependency>
+  <groupId>com.stripe</groupId>
+  <artifactId>stripe-java</artifactId>
+  <version>24.10.0</version>
+</dependency>
+
+Step 2 : Configure your Stripe secret API key securely in your application.
+
+To securely configure your Stripe secret API key in a Java Spring Boot application, follow these steps:
+
+1. Store your secret key in application properties
+Add your Stripe secret key to your application.properties or application.yml file, but avoid committing this file to version control if it contains secrets.
+application.properties
+
+stripe.api.key=sk_test_YourSecretKeyHere
+
+2. Load the key using Spring’s @Value annotation
+Inject the key into your service or configuration class:
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import com.stripe.Stripe;
+
+@Service
+public class StripeConfig {
+
+    public StripeConfig(@Value("${stripe.api.key}") String apiKey) {
+        Stripe.apiKey = apiKey;
+    }
+}
+
+3. (Optional) Use environment variables for extra security
+Instead of hardcoding the key in your properties file, you can use environment variables:
+
+application.properties
+
+stripe.api.key=${STRIPE_API_KEY}
+Then set the environment variable STRIPE_API_KEY in your deployment environment.
+
+Summary:
+
+Never hardcode your secret key in your codebase.
+Use properties files or environment variables.
+Inject the key at application startup.
+
+
+================================================
+You can find your Stripe secret API key in your Stripe Dashboard:
+
+1. Click on Developers in the left sidebar.
+2. Select API keys.
+3. Under the Secret key section, you’ll see your live and test secret keys. Click Reveal live key or Reveal test key to view and copy the key.
+Use the test key for development and the live key for production. Never share your secret key publicly or commit it to version control.
+
+
+=======================================
+IN frontend React-js
+
+npm install --save @stripe/react-stripe-js @stripe/stripe-js

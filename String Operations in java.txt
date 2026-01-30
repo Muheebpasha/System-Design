@@ -1,0 +1,48 @@
+1️⃣ Character & Length Operations
+=================================================================================
+| Method              | Description                  | Example                  |
+| ------------------- | ---------------------------- | ------------------------ |
+| `length()`          | Returns number of characters | `"Java".length()` → `4`  |
+| `charAt(int index)` | Returns character at index   | `"Java".charAt(1)` → `a` |
+| `toCharArray()`     | Converts to char array       | `"Java".toCharArray()`   |
+=================================================================================
+
+2️⃣ Case Conversion
+===========================================
+| Method          | Description           |
+| --------------- | --------------------- |
+| `toUpperCase()` | Converts to uppercase |
+| `toLowerCase()` | Converts to lowercase |
+===========================================
+Example:
+"Java".toUpperCase(); // JAVA
+
+====================================================================================
+3️⃣ Comparison Methods
+===========================================================
+| Method                        | Description             |
+| ----------------------------- | ----------------------- |
+| `equals(Object)`              | Compares content        |
+| `equalsIgnoreCase(String)`    | Ignores case            |
+| `compareTo(String)`           | Lexicographical compare |
+| `compareToIgnoreCase(String)` | Ignore case compare     |
+===========================================================
+Example:
+"java".equals("Java"); // false
+
+==============================================================================
+4️⃣ Searching & Checking
+===============================================
+| Method                   | Description      |
+| ------------------------ | ---------------- |
+| `contains(CharSequence)` | Checks substring |
+| `startsWith(String)`     | Prefix check     |
+| `endsWith(String)`       | Suffix check     |
+| `indexOf(String)`        | First occurrence |
+| `lastIndexOf(String)`    | Last occurrence  |
+| `matches(String regex)`  | Regex match      |
+===============================================
+
+
+
+

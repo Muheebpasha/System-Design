@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Store POS</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f2f2f2;
+}
+
+/* Header */
+header {
+    background: #4CAF50;
+    color: white;
+    text-align: center;
+    padding: 15px;
+    font-size: 22px;
+}
+
+/* Layout */
+.container {
+    padding: 15px;
+    max-width: 900px;
+    margin: auto;
+}
+
+/* Card */
+.card {
+    background: white;
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+/* Search */
+.search-box input {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    margin-bottom: 10px;
+}
+
+/* Category buttons */
+.category-filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 10px;
+}
+
+.category-filter button {
+    flex: 1 1 100px;
+    padding: 8px;
+    border: none;
+    border-radius: 5px;
+    background: #e0e0e0;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.category-filter button.active {
+    background: #4CAF50;
+    color: white;
+}
+
+/* Products */
+.products {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.product {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.product button {
+    background: #4CAF50;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* Cart */
+.cart-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.cart-item input {
+    width: 45px;
+    text-align: center;
+}
+
+.total {
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.checkout {
+    width: 100%;
+    padding: 12px;
+    background: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    margin-top: 10px;
+    cursor: pointer;
+}
+</style>
+</head>
+
+<body>
+
+<header>My Store POS</header>
+
+<div class="container">
+
+<!-- Products Section -->
+<div class="card">
+    <div class="search-box">
+        <input type="text" id="searchInput" placeholder="Search product...">
+    </div>
+
+    <div class="category-filter">
+        <button class="active" onclick="filterCategory('All', this)">All</button>
+        <button onclick="filterCategory('Hardware', this)">Hardware</button>
+        <button onclick="filterCategory('Electricals', this)">Electricals</button>
+        <button onclick="filterCategory('Plumbing', this)">Plumbing</button>
+        <button onclick="filterCategory('Paint', this)">Paint</button>
+    </div>
+
+    <div class="products" id="productList">
+        <!-- Products rendered by JS -->
+    </div>
+</div>
+
+<!-- Cart Section -->
+<div class="card">
+    <h3>Cart</h3>
+    <div id="cartItems"></div>
+    <div class="total" id="total">Total: ₹0</div>
+    <button class="checkout">Checkout</button>
+</div>
+
+</div>
+
+<script>
+const products = [
+    { name: "Hammer", price: 10, category: "Hardware" },
+    { name: "Drill", price: 50, category: "Hardware" },
+    { name: "Paint Brush", price: 5, category: "Paint" },
+    { name: "Pipe", price: 12, category: "Plumbing" },
+    { name: "Switch", price: 8, category: "Electricals" }
+];
+
+let cart = [];
+let selectedCategory = "All";
+
+const productList = document.getElementById("productList");
+const cartItems = document.getElementById("cartItems");
+const totalEl = document.getElementById("total");
+const searchInput = document.getElementById("searchInput");
+
+/* Render products */
+function renderProducts() {
+    productList.innerHTML = "";
+    const searchText = searchInput.value.toLowerCase();
+
+    products
+        .filter(p =>
+            (selectedCategory === "All" || p.category === selectedCategory) &&
+            p.name.toLowerCase().includes(searchText)
+        )
+        .forEach(p => {
+            const div = document.createElement("div");
+            div.className = "product";
+            div.innerHTML = `
+                <span>${p.name}</span>
+                <span>₹${p.price}</span>
+                <button onclick="addToCart('${p.name}')">Add</button>
+            `;
+            productList.appendChild(div);
+        });
+}
+
+/* Category filter */
+function filterCategory(cat, btn) {
+    selectedCategory = cat;
+    document.querySelectorAll(".category-filter button")
+        .forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    renderProducts();
+}
+
+/* Search */
+searchInput.addEventListener("input", renderProducts);
+
+/* Cart */
+function addToCart(name) {
+    const product = products.find(p => p.name === name);
+    const existing = cart.find(c => c.name === name);
+
+    if (existing) {
+        existing.qty++;
+    } else {
+        cart.push({ ...product, qty: 1 });
+    }
+    renderCart();
+}
+
+function renderCart() {
+    cartItems.innerHTML = "";
+    let total = 0;
+
+    cart.forEach(item => {
+        total += item.price * item.qty;
+        cartItems.innerHTML += `
+            <div class="cart-item">
+                <span>${item.name}</span>
+                <input type="number" value="${item.qty}" min="1"
+                    onchange="updateQty('${item.name}', this.value)">
+                <span>₹${item.price * item.qty}</span>
+            </div>
+        `;
+    });
+
+    totalEl.textContent = `Total: ₹${total}`;
+}
+
+function updateQty(name, qty) {
+    const item = cart.find(c => c.name === name);
+    item.qty = parseInt(qty);
+    renderCart();
+}
+
+renderProducts();
+</script>
+
+</body>
+</html>
+

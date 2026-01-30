@@ -1,0 +1,78 @@
+Stream API Factory Methods ka matlab hota hai Stream create karne ke standard + safe ways (without manual loops).
+
+
+🔹 What are Stream API Factory Methods?
+
+👉 Factory methods =
+
+Static methods jo Stream / IntStream / LongStream / DoubleStream create karti hain.
+
+➡️ Ye methods Stream interface / utility classes provide karti hain.
+
+🔹 1️⃣ Stream.of()
+✅ Use case
+
+* Known / fixed values
+
+* Small datasets
+
+* Test data
+
+Stream<String> stream = Stream.of("Java", "Spring", "Docker");
+
+Stream<Integer> numbers = Stream.of(1, 2, 3, 4);
+
+🧠 Real-world
+
+* Feature flags
+
+* Static config values
+
+* Mock data for unit testing
+
+🔹 2️⃣ Arrays.stream()
+
+✅ Use case
+
+Convert array → stream
+
+int[] arr = {10, 20, 30};
+
+IntStream intStream = Arrays.stream(arr);
+
+String[] names = {"A", "B", "C"};
+Stream<String> stream = Arrays.stream(names);
+
+🧠 Why special?
+
+* Primitive arrays → primitive streams
+
+* Avoids boxing (int → Integer)
+
+===================================
+
+Map<Integer, Map<String, String>> result =
+    students.stream()
+        .collect(Collectors.groupingBy(
+            Student::getGradeLevel,
+            Collectors.collectingAndThen(
+                Collectors.toList(),
+                list -> {
+                    String maxName = list.stream()
+                        .max(Comparator.comparingDouble(Student::getGpa))
+                        .map(Student::getName)
+                        .orElse("N/A");
+
+                    String minName = list.stream()
+                        .min(Comparator.comparingDouble(Student::getGpa))
+                        .map(Student::getName)
+                        .orElse("N/A");
+
+                    Map<String, String> map = new HashMap<>();
+                    map.put("maxGpaStudent", maxName);
+                    map.put("minGpaStudent", minName);
+                    return map;
+                }
+            )
+        ));
+
